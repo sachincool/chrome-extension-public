@@ -1,0 +1,279 @@
+/* LinkedIntel Design System - Tailwind CSS Base */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Custom Properties (Design Tokens) */
+:root {
+  /* Colors */
+  --linkedintel-primary: #0a66c2;
+  --linkedintel-primary-dark: #004182;
+  --linkedintel-primary-light: #e0f0fe;
+  --linkedintel-secondary: #f8f9fa;
+  --linkedintel-accent: #36acfa;
+  
+  /* Semantic Colors */
+  --linkedintel-success: #0ea5e9;
+  --linkedintel-warning: #f59e0b;
+  --linkedintel-error: #ef4444;
+  --linkedintel-info: #3b82f6;
+  
+  /* Text Colors */
+  --linkedintel-text-primary: #1a1a1a;
+  --linkedintel-text-secondary: #666666;
+  --linkedintel-text-muted: #999999;
+  --linkedintel-text-inverse: #ffffff;
+  
+  /* Background Colors */
+  --linkedintel-bg-primary: #ffffff;
+  --linkedintel-bg-secondary: #f8f9fa;
+  --linkedintel-bg-tertiary: #f1f3f4;
+  --linkedintel-bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  /* Border Colors */
+  --linkedintel-border-primary: #e0e0e0;
+  --linkedintel-border-secondary: #dadce0;
+  --linkedintel-border-focus: #0a66c2;
+  
+  /* Spacing */
+  --linkedintel-space-xs: 4px;
+  --linkedintel-space-sm: 8px;
+  --linkedintel-space-md: 16px;
+  --linkedintel-space-lg: 24px;
+  --linkedintel-space-xl: 32px;
+  
+  /* Typography */
+  --linkedintel-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --linkedintel-font-size-xs: 11px;
+  --linkedintel-font-size-sm: 12px;
+  --linkedintel-font-size-base: 14px;
+  --linkedintel-font-size-lg: 16px;
+  --linkedintel-font-size-xl: 18px;
+  
+  /* Border Radius */
+  --linkedintel-radius-sm: 4px;
+  --linkedintel-radius-md: 6px;
+  --linkedintel-radius-lg: 8px;
+  --linkedintel-radius-xl: 12px;
+  
+  /* Shadows */
+  --linkedintel-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --linkedintel-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --linkedintel-shadow-lg: 0 8px 16px -4px rgba(0, 0, 0, 0.1);
+  --linkedintel-shadow-extension: 0 4px 16px rgba(0, 0, 0, 0.15);
+  
+  /* Z-Index Scale */
+  --linkedintel-z-base: 1;
+  --linkedintel-z-overlay: 999999;
+  --linkedintel-z-modal: 1000000;
+  --linkedintel-z-tooltip: 1000001;
+  --linkedintel-z-notification: 1000002;
+  
+  /* Transition Durations */
+  --linkedintel-duration-fast: 150ms;
+  --linkedintel-duration-normal: 200ms;
+  --linkedintel-duration-slow: 300ms;
+  
+  /* Component Sizes */
+  --linkedintel-sidebar-width: 360px;
+  --linkedintel-sidepanel-width: 400px;
+  --linkedintel-notification-width: 320px;
+}
+
+/* Base styles for extension context */
+.linkedintel-root {
+  /* Reset and isolation */
+  all: initial;
+  
+  /* Base font and sizing */
+  font-family: var(--linkedintel-font-family);
+  font-size: var(--linkedintel-font-size-base);
+  line-height: 1.5;
+  color: var(--linkedintel-text-primary);
+  
+  /* Box model */
+  box-sizing: border-box;
+  
+  /* Isolation */
+  isolation: isolate;
+  z-index: var(--linkedintel-z-overlay);
+  
+  /* Ensure all children inherit box-sizing */
+  *, *::before, *::after {
+    box-sizing: inherit;
+  }
+}
+
+/* Extension-specific base classes */
+.linkedintel-surface {
+  background-color: var(--linkedintel-bg-primary);
+  border: 1px solid var(--linkedintel-border-primary);
+  border-radius: var(--linkedintel-radius-lg);
+  box-shadow: var(--linkedintel-shadow-md);
+}
+
+.linkedintel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--linkedintel-bg-overlay);
+  z-index: var(--linkedintel-z-overlay);
+}
+
+.linkedintel-notification {
+  position: fixed;
+  top: var(--linkedintel-space-lg);
+  right: var(--linkedintel-space-lg);
+  width: var(--linkedintel-notification-width);
+  max-width: calc(100vw - 2 * var(--linkedintel-space-lg));
+  z-index: var(--linkedintel-z-notification);
+}
+
+/* Component base styles */
+.linkedintel-header {
+  background: linear-gradient(135deg, var(--linkedintel-primary) 0%, var(--linkedintel-primary-dark) 100%);
+  color: var(--linkedintel-text-inverse);
+  padding: var(--linkedintel-space-md);
+  border-radius: var(--linkedintel-radius-lg) var(--linkedintel-radius-lg) 0 0;
+}
+
+.linkedintel-content {
+  padding: var(--linkedintel-space-md);
+  background-color: var(--linkedintel-bg-primary);
+}
+
+.linkedintel-footer {
+  padding: var(--linkedintel-space-sm) var(--linkedintel-space-md);
+  background-color: var(--linkedintel-bg-secondary);
+  border-top: 1px solid var(--linkedintel-border-primary);
+  border-radius: 0 0 var(--linkedintel-radius-lg) var(--linkedintel-radius-lg);
+}
+
+/* State classes */
+.linkedintel-loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.linkedintel-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.linkedintel-hidden {
+  display: none !important;
+}
+
+.linkedintel-visible {
+  display: block !important;
+}
+
+/* Animation utilities */
+.linkedintel-transition {
+  transition: all var(--linkedintel-duration-normal) ease;
+}
+
+.linkedintel-transition-fast {
+  transition: all var(--linkedintel-duration-fast) ease;
+}
+
+.linkedintel-transition-slow {
+  transition: all var(--linkedintel-duration-slow) ease;
+}
+
+/* Focus management for accessibility */
+.linkedintel-focus-visible:focus {
+  outline: 2px solid var(--linkedintel-border-focus);
+  outline-offset: 2px;
+}
+
+/* Text utilities */
+.linkedintel-text-xs { font-size: var(--linkedintel-font-size-xs); }
+.linkedintel-text-sm { font-size: var(--linkedintel-font-size-sm); }
+.linkedintel-text-base { font-size: var(--linkedintel-font-size-base); }
+.linkedintel-text-lg { font-size: var(--linkedintel-font-size-lg); }
+.linkedintel-text-xl { font-size: var(--linkedintel-font-size-xl); }
+
+.linkedintel-text-primary { color: var(--linkedintel-text-primary); }
+.linkedintel-text-secondary { color: var(--linkedintel-text-secondary); }
+.linkedintel-text-muted { color: var(--linkedintel-text-muted); }
+.linkedintel-text-inverse { color: var(--linkedintel-text-inverse); }
+
+/* Background utilities */
+.linkedintel-bg-primary { background-color: var(--linkedintel-bg-primary); }
+.linkedintel-bg-secondary { background-color: var(--linkedintel-bg-secondary); }
+.linkedintel-bg-tertiary { background-color: var(--linkedintel-bg-tertiary); }
+
+/* Border utilities */
+.linkedintel-border { border: 1px solid var(--linkedintel-border-primary); }
+.linkedintel-border-secondary { border: 1px solid var(--linkedintel-border-secondary); }
+.linkedintel-border-focus { border: 1px solid var(--linkedintel-border-focus); }
+
+/* Spacing utilities */
+.linkedintel-p-xs { padding: var(--linkedintel-space-xs); }
+.linkedintel-p-sm { padding: var(--linkedintel-space-sm); }
+.linkedintel-p-md { padding: var(--linkedintel-space-md); }
+.linkedintel-p-lg { padding: var(--linkedintel-space-lg); }
+.linkedintel-p-xl { padding: var(--linkedintel-space-xl); }
+
+.linkedintel-m-xs { margin: var(--linkedintel-space-xs); }
+.linkedintel-m-sm { margin: var(--linkedintel-space-sm); }
+.linkedintel-m-md { margin: var(--linkedintel-space-md); }
+.linkedintel-m-lg { margin: var(--linkedintel-space-lg); }
+.linkedintel-m-xl { margin: var(--linkedintel-space-xl); }
+
+/* Radius utilities */
+.linkedintel-rounded-sm { border-radius: var(--linkedintel-radius-sm); }
+.linkedintel-rounded { border-radius: var(--linkedintel-radius-md); }
+.linkedintel-rounded-lg { border-radius: var(--linkedintel-radius-lg); }
+.linkedintel-rounded-xl { border-radius: var(--linkedintel-radius-xl); }
+.linkedintel-rounded-full { border-radius: 9999px; }
+
+/* Shadow utilities */
+.linkedintel-shadow-sm { box-shadow: var(--linkedintel-shadow-sm); }
+.linkedintel-shadow { box-shadow: var(--linkedintel-shadow-md); }
+.linkedintel-shadow-lg { box-shadow: var(--linkedintel-shadow-lg); }
+.linkedintel-shadow-extension { box-shadow: var(--linkedintel-shadow-extension); }
+
+/* Dark mode support - DISABLED for now due to inline style conflicts */
+/* TODO: Re-enable dark mode after converting all inline styles to CSS variables */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --linkedintel-text-primary: #e8eaed;
+    --linkedintel-text-secondary: #9aa0a6;
+    --linkedintel-text-muted: #80868b;
+    --linkedintel-bg-primary: #202124;
+    --linkedintel-bg-secondary: #2d2e30;
+    --linkedintel-bg-tertiary: #35363a;
+    --linkedintel-border-primary: #3c4043;
+    --linkedintel-border-secondary: #5f6368;
+  }
+} */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --linkedintel-border-primary: #000000;
+    --linkedintel-border-secondary: #000000;
+    --linkedintel-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --linkedintel-shadow-lg: 0 8px 16px -4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .linkedintel-transition,
+  .linkedintel-transition-fast,
+  .linkedintel-transition-slow {
+    transition: none;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

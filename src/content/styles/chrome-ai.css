@@ -1,0 +1,570 @@
+/* Chrome AI Components Styling */
+
+/* AI Summary Badge on LinkedIn Page */
+.linkedintel-ai-summary-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+}
+
+.linkedintel-ai-summary-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+  transition: all 0.2s ease;
+}
+
+.linkedintel-ai-summary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.5);
+}
+
+.linkedintel-ai-summary-btn.generating {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.linkedintel-ai-sparkle {
+  width: 16px;
+  height: 16px;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.1) rotate(180deg); opacity: 0.8; }
+}
+
+/* AI Summary Tooltip */
+.linkedintel-ai-summary-tooltip {
+  position: fixed;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  max-width: 400px;
+  z-index: 1000000;
+  animation: tooltipSlideIn 0.3s ease-out;
+}
+
+@keyframes tooltipSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.linkedintel-ai-summary-tooltip.error {
+  border: 2px solid #ef4444;
+}
+
+.linkedintel-ai-summary-tooltip-content {
+  padding: 16px;
+}
+
+.linkedintel-ai-summary-tooltip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.linkedintel-ai-summary-tooltip-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.linkedintel-ai-summary-tooltip-close {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.linkedintel-ai-summary-tooltip-close:hover {
+  color: #0f172a;
+}
+
+.linkedintel-ai-summary-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+}
+
+.linkedintel-ai-summary-bullets li {
+  padding: 8px 0 8px 24px;
+  position: relative;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.linkedintel-ai-summary-bullets li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #10b981;
+  font-weight: bold;
+}
+
+.linkedintel-ai-summary-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.linkedintel-ai-summary-footer svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* AI Status Indicator */
+.linkedintel-ai-status-wrapper {
+  margin: 12px 0;
+}
+
+.linkedintel-ai-status {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.linkedintel-ai-status-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: #475569;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.linkedintel-ai-status-toggle:hover {
+  background: #f1f5f9;
+}
+
+.linkedintel-ai-icon {
+  width: 16px;
+  height: 16px;
+  color: #a855f7;
+}
+
+.linkedintel-ai-chevron {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s;
+}
+
+.linkedintel-ai-status.expanded .linkedintel-ai-chevron {
+  transform: rotate(180deg);
+}
+
+.linkedintel-ai-status-details {
+  padding: 14px;
+  display: none;
+  border-top: 1px solid #e2e8f0;
+}
+
+.linkedintel-ai-status.expanded .linkedintel-ai-status-details {
+  display: block;
+}
+
+.linkedintel-ai-status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.linkedintel-ai-status-header h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.linkedintel-ai-help-btn {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 4px;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.linkedintel-ai-help-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.linkedintel-ai-help-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.linkedintel-ai-features-list {
+  margin-bottom: 12px;
+}
+
+.linkedintel-ai-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  transition: background 0.2s;
+}
+
+.linkedintel-ai-feature-item:hover {
+  background: #f1f5f9;
+}
+
+.linkedintel-ai-feature-icon {
+  flex-shrink: 0;
+}
+
+.linkedintel-ai-feature-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.linkedintel-ai-feature-item.available .linkedintel-check-icon {
+  color: #10b981;
+}
+
+.linkedintel-ai-feature-item.download-required .linkedintel-download-icon {
+  color: #f59e0b;
+}
+
+.linkedintel-ai-feature-item.unavailable .linkedintel-unavailable-icon {
+  color: #64748b;
+}
+
+.linkedintel-ai-feature-info {
+  flex: 1;
+}
+
+.linkedintel-ai-feature-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.linkedintel-ai-feature-desc {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.linkedintel-ai-feature-status {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.linkedintel-ai-feature-item.available .linkedintel-ai-feature-status {
+  color: #10b981;
+}
+
+.linkedintel-ai-feature-item.download-required .linkedintel-ai-feature-status {
+  color: #f59e0b;
+}
+
+.linkedintel-ai-feature-item.unavailable .linkedintel-ai-feature-status {
+  color: #64748b;
+}
+
+.linkedintel-ai-model-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.linkedintel-ai-model-info svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.linkedintel-ai-model-info.success {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.linkedintel-ai-model-info.info {
+  background: #eff6ff;
+  color: #1e40af;
+}
+
+.linkedintel-ai-model-info.warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.linkedintel-ai-model-title {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.linkedintel-ai-model-desc {
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.linkedintel-ai-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #166534;
+}
+
+.linkedintel-ai-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* AI Onboarding Modal */
+.linkedintel-ai-onboarding-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.linkedintel-ai-onboarding-modal.show {
+  opacity: 1;
+}
+
+.linkedintel-onboarding-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.linkedintel-onboarding-content {
+  position: relative;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 550px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: modalSlideUp 0.4s ease-out;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.linkedintel-onboarding-header {
+  padding: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.linkedintel-onboarding-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.linkedintel-onboarding-body {
+  padding: 24px;
+}
+
+.linkedintel-onboarding-intro {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #475569;
+  margin-bottom: 20px;
+}
+
+.linkedintel-onboarding-features {
+  margin-bottom: 20px;
+}
+
+.linkedintel-onboarding-feature {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  transition: background 0.2s;
+}
+
+.linkedintel-onboarding-feature:hover {
+  background: #f1f5f9;
+}
+
+.linkedintel-onboarding-feature-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.linkedintel-onboarding-feature-text strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.linkedintel-onboarding-feature-text span {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.linkedintel-onboarding-privacy,
+.linkedintel-onboarding-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #166534;
+}
+
+.linkedintel-onboarding-privacy svg,
+.linkedintel-onboarding-info svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.linkedintel-onboarding-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.linkedintel-onboarding-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.linkedintel-onboarding-btn.primary {
+  background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}
+
+.linkedintel-onboarding-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
+}
+
+/* Chat Toolbar */
+.linkedintel-chat-toolbar {
+  padding: 6px 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Refine Modal Overlay */
+.linkedintel-refine-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000000;
+}
+
+/* Spinner for AI loading states */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.linkedintel-spinner {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 0.6s linear infinite;
+}
+

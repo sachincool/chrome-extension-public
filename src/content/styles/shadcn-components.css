@@ -1,0 +1,293 @@
+/* Shadcn-inspired components for vanilla JavaScript */
+/* Modern, accessible UI components following shadcn design principles */
+
+/* CSS Variables for consistent theming */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+  --radius: 0.5rem;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+/* Card Components */
+.shadcn-card {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-radius: calc(var(--radius) + 0.25rem);
+  border: 1px solid hsl(var(--border));
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.shadcn-card:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  transform: translateY(-1px);
+}
+
+.shadcn-card-header {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 0.375rem;
+  align-items: start;
+  padding-bottom: 1.5rem;
+}
+
+.shadcn-card-title {
+  font-weight: 600;
+  line-height: 1;
+  font-size: 1.125rem;
+  color: hsl(var(--foreground));
+}
+
+.shadcn-card-description {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.shadcn-card-content {
+  padding: 0;
+}
+
+.shadcn-card-footer {
+  display: flex;
+  align-items: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid hsl(var(--border));
+}
+
+/* Progress Components */
+.shadcn-progress {
+  position: relative;
+  height: 0.5rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 9999px;
+  background-color: hsl(var(--primary) / 0.2);
+}
+
+.shadcn-progress-indicator {
+  height: 100%;
+  width: 100%;
+  flex: 1;
+  background-color: hsl(var(--primary));
+  transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+  border-radius: 9999px;
+}
+
+/* Badge Components */
+.shadcn-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: calc(var(--radius) - 0.125rem);
+  border: 1px solid;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  width: fit-content;
+  white-space: nowrap;
+  flex-shrink: 0;
+  gap: 0.25rem;
+  transition: color 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.shadcn-badge.default {
+  border-color: transparent;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.shadcn-badge.secondary {
+  border-color: transparent;
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.shadcn-badge.destructive {
+  border-color: transparent;
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+}
+
+.shadcn-badge.outline {
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
+}
+
+.shadcn-badge.outline:hover {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+/* Skeleton Loading Components */
+.shadcn-skeleton {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  border-radius: calc(var(--radius) - 0.125rem);
+  background-color: hsl(var(--muted));
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Modern button styling */
+.shadcn-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: calc(var(--radius) - 0.125rem);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  height: 2.25rem;
+  gap: 0.5rem;
+}
+
+.shadcn-button.primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.shadcn-button.primary:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+.shadcn-button.secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.shadcn-button.secondary:hover {
+  background-color: hsl(var(--secondary) / 0.8);
+}
+
+.shadcn-button.outline {
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.shadcn-button.outline:hover {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+/* Alert components */
+.shadcn-alert {
+  position: relative;
+  width: 100%;
+  border-radius: calc(var(--radius) - 0.125rem);
+  border: 1px solid hsl(var(--border));
+  padding: 1rem;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.shadcn-alert.destructive {
+  border-color: hsl(var(--destructive) / 0.5);
+  color: hsl(var(--destructive));
+  background-color: hsl(var(--destructive) / 0.1);
+}
+
+/* Utility classes for modern design */
+.shadcn-text-xs { font-size: 0.75rem; line-height: 1rem; }
+.shadcn-text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.shadcn-text-base { font-size: 1rem; line-height: 1.5rem; }
+.shadcn-text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.shadcn-text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.shadcn-text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.shadcn-text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+
+.shadcn-font-medium { font-weight: 500; }
+.shadcn-font-semibold { font-weight: 600; }
+.shadcn-font-bold { font-weight: 700; }
+
+.shadcn-text-muted { color: hsl(var(--muted-foreground)); }
+.shadcn-text-primary { color: hsl(var(--primary)); }
+.shadcn-text-destructive { color: hsl(var(--destructive)); }
+
+/* Modern spacing utilities */
+.shadcn-space-y-2 > * + * { margin-top: 0.5rem; }
+.shadcn-space-y-4 > * + * { margin-top: 1rem; }
+.shadcn-space-y-6 > * + * { margin-top: 1.5rem; }
+
+.shadcn-flex { display: flex; }
+.shadcn-flex-col { flex-direction: column; }
+.shadcn-flex-row { flex-direction: row; }
+.shadcn-items-center { align-items: center; }
+.shadcn-justify-between { justify-content: space-between; }
+.shadcn-justify-center { justify-content: center; }
+.shadcn-gap-2 { gap: 0.5rem; }
+.shadcn-gap-4 { gap: 1rem; }
+.shadcn-gap-6 { gap: 1.5rem; }
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .shadcn-card,
+  .shadcn-button,
+  .shadcn-badge,
+  .shadcn-progress-indicator {
+    transition: none;
+  }
+
+  .shadcn-skeleton {
+    animation: none;
+  }
+
+  .shadcn-card:hover {
+    transform: none;
+  }
+}
+
+/* Focus states for accessibility */
+.shadcn-button:focus-visible,
+.shadcn-badge:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}

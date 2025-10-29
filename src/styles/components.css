@@ -1,0 +1,2599 @@
+/* LinkedIntel Components - shadcn/ui inspired components for Chrome Extension */
+
+/* Component Library Base */
+.linkedintel-component {
+  /* Ensure isolation from LinkedIn styles */
+  all: initial;
+  font-family: var(--linkedintel-font-family);
+  box-sizing: border-box;
+}
+
+/* Button Components */
+.linkedintel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--linkedintel-space-sm);
+  border-radius: var(--linkedintel-radius-md);
+  font-size: var(--linkedintel-font-size-sm);
+  font-weight: 500;
+  line-height: 1;
+  transition: all var(--linkedintel-duration-normal) ease;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  
+  /* Focus styles */
+  &:focus-visible {
+    outline: 2px solid var(--linkedintel-border-focus);
+    outline-offset: 2px;
+  }
+  
+  /* Disabled state */
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+/* Button Variants */
+.linkedintel-btn-primary {
+  background-color: var(--linkedintel-primary);
+  color: var(--linkedintel-text-inverse);
+  padding: var(--linkedintel-space-sm) var(--linkedintel-space-md);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--linkedintel-primary-dark);
+  }
+  
+  &:active:not(:disabled) {
+    background-color: var(--linkedintel-primary-dark);
+    transform: translateY(1px);
+  }
+}
+
+.linkedintel-btn-secondary {
+  background-color: var(--linkedintel-bg-primary);
+  color: var(--linkedintel-text-primary);
+  border: 1px solid var(--linkedintel-border-primary);
+  padding: var(--linkedintel-space-sm) var(--linkedintel-space-md);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--linkedintel-bg-secondary);
+    border-color: var(--linkedintel-primary);
+  }
+  
+  &:active:not(:disabled) {
+    background-color: var(--linkedintel-bg-tertiary);
+  }
+}
+
+.linkedintel-btn-ghost {
+  background-color: transparent;
+  color: var(--linkedintel-text-primary);
+  padding: var(--linkedintel-space-sm) var(--linkedintel-space-md);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--linkedintel-bg-secondary);
+  }
+  
+  &:active:not(:disabled) {
+    background-color: var(--linkedintel-bg-tertiary);
+  }
+}
+
+.linkedintel-btn-sm {
+  padding: var(--linkedintel-space-xs) var(--linkedintel-space-sm);
+  font-size: var(--linkedintel-font-size-xs);
+  border-radius: var(--linkedintel-radius-sm);
+}
+
+.linkedintel-btn-lg {
+  padding: var(--linkedintel-space-md) var(--linkedintel-space-lg);
+  font-size: var(--linkedintel-font-size-base);
+  border-radius: var(--linkedintel-radius-lg);
+}
+
+.linkedintel-btn-icon {
+  padding: var(--linkedintel-space-sm);
+  width: auto;
+  height: auto;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+/* Input Components */
+.linkedintel-input {
+  width: 100%;
+  border-radius: var(--linkedintel-radius-md);
+  border: 1px solid var(--linkedintel-border-primary);
+  background-color: var(--linkedintel-bg-primary);
+  padding: var(--linkedintel-space-sm) var(--linkedintel-space-md);
+  font-size: var(--linkedintel-font-size-sm);
+  color: var(--linkedintel-text-primary);
+  transition: all var(--linkedintel-duration-normal) ease;
+  outline: none;
+  
+  &::placeholder {
+    color: var(--linkedintel-text-muted);
+  }
+  
+  &:focus {
+    border-color: var(--linkedintel-primary);
+    box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.1);
+  }
+  
+  &:disabled {
+    background-color: var(--linkedintel-bg-tertiary);
+    color: var(--linkedintel-text-muted);
+    cursor: not-allowed;
+  }
+}
+
+.linkedintel-input-sm {
+  padding: var(--linkedintel-space-xs) var(--linkedintel-space-sm);
+  font-size: var(--linkedintel-font-size-xs);
+}
+
+.linkedintel-input-lg {
+  padding: var(--linkedintel-space-md) var(--linkedintel-space-lg);
+  font-size: var(--linkedintel-font-size-base);
+}
+
+/* Card Components */
+.linkedintel-card {
+  background-color: var(--linkedintel-bg-primary);
+  border: 1px solid var(--linkedintel-border-primary);
+  border-radius: var(--linkedintel-radius-lg);
+  box-shadow: var(--linkedintel-shadow-sm);
+  overflow: hidden;
+}
+
+.linkedintel-card-header {
+  padding: var(--linkedintel-space-md) var(--linkedintel-space-md) 0;
+  
+  &:last-child {
+    padding-bottom: var(--linkedintel-space-md);
+  }
+}
+
+.linkedintel-card-content {
+  padding: var(--linkedintel-space-md);
+}
+
+.linkedintel-card-footer {
+  padding: 0 var(--linkedintel-space-md) var(--linkedintel-space-md);
+  
+  &:first-child {
+    padding-top: var(--linkedintel-space-md);
+  }
+}
+
+.linkedintel-card-title {
+  font-size: var(--linkedintel-font-size-lg);
+  font-weight: 600;
+  color: var(--linkedintel-text-primary);
+  margin: 0 0 var(--linkedintel-space-xs) 0;
+  line-height: 1.25;
+}
+
+.linkedintel-card-description {
+  font-size: var(--linkedintel-font-size-sm);
+  color: var(--linkedintel-text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Badge Components */
+.linkedintel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--linkedintel-space-xs);
+  border-radius: var(--linkedintel-radius-xl);
+  padding: var(--linkedintel-space-xs) var(--linkedintel-space-sm);
+  font-size: var(--linkedintel-font-size-xs);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition: all var(--linkedintel-duration-normal) ease;
+}
+
+.linkedintel-badge-default {
+  background-color: var(--linkedintel-bg-secondary);
+  color: var(--linkedintel-text-primary);
+  border: 1px solid var(--linkedintel-border-primary);
+}
+
+.linkedintel-badge-primary {
+  background-color: var(--linkedintel-primary);
+  color: var(--linkedintel-text-inverse);
+}
+
+.linkedintel-badge-success {
+  background-color: var(--linkedintel-success);
+  color: var(--linkedintel-text-inverse);
+}
+
+.linkedintel-badge-warning {
+  background-color: var(--linkedintel-warning);
+  color: var(--linkedintel-text-inverse);
+}
+
+.linkedintel-badge-error {
+  background-color: var(--linkedintel-error);
+  color: var(--linkedintel-text-inverse);
+}
+
+.linkedintel-badge-outline {
+  background-color: transparent;
+  border: 1px solid currentColor;
+}
+
+/* Loading Spinner */
+.linkedintel-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--linkedintel-border-primary);
+  border-radius: 50%;
+  border-top-color: var(--linkedintel-primary);
+  animation: linkedintel-spin 0.8s linear infinite;
+}
+
+.linkedintel-spinner-sm {
+  width: 12px;
+  height: 12px;
+  border-width: 1.5px;
+}
+
+.linkedintel-spinner-lg {
+  width: 20px;
+  height: 20px;
+  border-width: 2.5px;
+}
+
+@keyframes linkedintel-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Separator */
+.linkedintel-separator {
+  border: none;
+  border-top: 1px solid var(--linkedintel-border-primary);
+  margin: var(--linkedintel-space-md) 0;
+  width: 100%;
+}
+
+.linkedintel-separator-vertical {
+  border: none;
+  border-left: 1px solid var(--linkedintel-border-primary);
+  margin: 0 var(--linkedintel-space-md);
+  height: 100%;
+  width: 1px;
+  display: inline-block;
+}
+
+/* Avatar */
+.linkedintel-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--linkedintel-bg-secondary);
+  color: var(--linkedintel-text-secondary);
+  font-weight: 500;
+  user-select: none;
+  width: 32px;
+  height: 32px;
+  font-size: var(--linkedintel-font-size-sm);
+}
+
+.linkedintel-avatar-sm {
+  width: 24px;
+  height: 24px;
+  font-size: var(--linkedintel-font-size-xs);
+}
+
+.linkedintel-avatar-lg {
+  width: 40px;
+  height: 40px;
+  font-size: var(--linkedintel-font-size-base);
+}
+
+.linkedintel-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Tooltip */
+.linkedintel-tooltip {
+  position: absolute;
+  background-color: var(--linkedintel-text-primary);
+  color: var(--linkedintel-text-inverse);
+  padding: var(--linkedintel-space-xs) var(--linkedintel-space-sm);
+  border-radius: var(--linkedintel-radius-sm);
+  font-size: var(--linkedintel-font-size-xs);
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: var(--linkedintel-z-tooltip);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--linkedintel-duration-normal) ease;
+  transform: translateY(-100%) translateX(-50%);
+  top: -8px;
+  left: 50%;
+}
+
+.linkedintel-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  border: 4px solid transparent;
+  border-top-color: var(--linkedintel-text-primary);
+  transform: translateX(-50%);
+}
+
+.linkedintel-tooltip.visible {
+  opacity: 1;
+}
+
+/* Progress */
+.linkedintel-progress {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--linkedintel-radius-xl);
+  background-color: var(--linkedintel-bg-secondary);
+  height: 8px;
+  width: 100%;
+}
+
+.linkedintel-progress-indicator {
+  height: 100%;
+  background-color: var(--linkedintel-primary);
+  border-radius: inherit;
+  transition: width var(--linkedintel-duration-slow) ease;
+  width: 0%;
+}
+
+/* Alert */
+.linkedintel-alert {
+  position: relative;
+  padding: var(--linkedintel-space-md);
+  border-radius: var(--linkedintel-radius-lg);
+  border: 1px solid var(--linkedintel-border-primary);
+  background-color: var(--linkedintel-bg-primary);
+}
+
+.linkedintel-alert-title {
+  font-size: var(--linkedintel-font-size-sm);
+  font-weight: 600;
+  color: var(--linkedintel-text-primary);
+  margin: 0 0 var(--linkedintel-space-xs) 0;
+  line-height: 1.25;
+}
+
+.linkedintel-alert-description {
+  font-size: var(--linkedintel-font-size-sm);
+  color: var(--linkedintel-text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.linkedintel-alert-success {
+  border-color: var(--linkedintel-success);
+  background-color: rgba(14, 165, 233, 0.05);
+}
+
+.linkedintel-alert-warning {
+  border-color: var(--linkedintel-warning);
+  background-color: rgba(245, 158, 11, 0.05);
+}
+
+.linkedintel-alert-error {
+  border-color: var(--linkedintel-error);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+/* Skeleton */
+.linkedintel-skeleton {
+  background-color: var(--linkedintel-bg-secondary);
+  border-radius: var(--linkedintel-radius-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.linkedintel-skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: linkedintel-skeleton-loading 1.5s infinite;
+}
+
+@keyframes linkedintel-skeleton-loading {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Switch */
+.linkedintel-switch {
+  position: relative;
+  display: inline-flex;
+  width: 44px;
+  height: 24px;
+  border-radius: var(--linkedintel-radius-xl);
+  background-color: var(--linkedintel-bg-secondary);
+  border: 1px solid var(--linkedintel-border-primary);
+  cursor: pointer;
+  transition: all var(--linkedintel-duration-normal) ease;
+}
+
+.linkedintel-switch:focus {
+  outline: 2px solid var(--linkedintel-border-focus);
+  outline-offset: 2px;
+}
+
+.linkedintel-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--linkedintel-bg-primary);
+  box-shadow: var(--linkedintel-shadow-sm);
+  transition: transform var(--linkedintel-duration-normal) ease;
+}
+
+.linkedintel-switch[data-state="checked"] {
+  background-color: var(--linkedintel-primary);
+  border-color: var(--linkedintel-primary);
+}
+
+.linkedintel-switch[data-state="checked"] .linkedintel-switch-thumb {
+  transform: translateX(20px);
+}
+
+/* Checkbox */
+.linkedintel-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--linkedintel-radius-sm);
+  border: 1px solid var(--linkedintel-border-primary);
+  background-color: var(--linkedintel-bg-primary);
+  cursor: pointer;
+  transition: all var(--linkedintel-duration-normal) ease;
+}
+
+.linkedintel-checkbox:focus {
+  outline: 2px solid var(--linkedintel-border-focus);
+  outline-offset: 2px;
+}
+
+.linkedintel-checkbox[data-state="checked"] {
+  background-color: var(--linkedintel-primary);
+  border-color: var(--linkedintel-primary);
+  color: var(--linkedintel-text-inverse);
+}
+
+.linkedintel-checkbox-indicator {
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Custom scrollbar for extension */
+.linkedintel-scrollable {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--linkedintel-border-secondary) transparent;
+}
+
+.linkedintel-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.linkedintel-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.linkedintel-scrollable::-webkit-scrollbar-thumb {
+  background-color: var(--linkedintel-border-secondary);
+  border-radius: var(--linkedintel-radius-xl);
+}
+
+.linkedintel-scrollable::-webkit-scrollbar-thumb:hover {
+  background-color: var(--linkedintel-text-muted);
+}
+
+/* Animation utilities */
+.linkedintel-animate-in {
+  animation: linkedintel-fade-in var(--linkedintel-duration-slow) ease;
+}
+
+.linkedintel-animate-out {
+  animation: linkedintel-fade-out var(--linkedintel-duration-slow) ease;
+}
+
+@keyframes linkedintel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes linkedintel-fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Enhanced Tech Stack Cards with Hiring Intensity */
+.linkedintel-tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.linkedintel-tech-card {
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+.linkedintel-tech-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.linkedintel-tech-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.linkedintel-tech-card.hot {
+  background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+  border-color: #ef4444;
+}
+
+.linkedintel-tech-card.hot::before {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+.linkedintel-tech-card.warm {
+  background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+  border-color: #f59e0b;
+}
+
+.linkedintel-tech-card.warm::before {
+  background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+}
+
+.linkedintel-tech-card.cold {
+  background: #ffffff;
+  border-color: #e5e7eb;
+}
+
+.linkedintel-tech-card.more-indicator {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.linkedintel-tech-card.more-indicator::before {
+  display: none;
+}
+
+.linkedintel-tech-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12px;
+  word-break: break-word;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.linkedintel-tech-card.more-indicator .linkedintel-tech-name {
+  color: white;
+  margin-bottom: 0;
+  font-size: 15px;
+}
+
+.linkedintel-tech-metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.linkedintel-tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.linkedintel-tech-badge.hiring {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.linkedintel-tech-badge.people {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+.linkedintel-tech-badge.recency {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e3a8a;
+  border: 1px solid #93c5fd;
+}
+
+/* Enhanced Contact Cards with Location & Tenure */
+.linkedintel-contact-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.linkedintel-tenure-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 6px;
+  line-height: 1;
+}
+
+.linkedintel-tenure-badge svg {
+  flex-shrink: 0;
+}
+
+.linkedintel-tenure-badge.tenure-new {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.linkedintel-tenure-badge.tenure-recent {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.linkedintel-tenure-badge.tenure-established {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+  color: #6b21a8;
+  border: 1px solid #c084fc;
+}
+
+/* Responsive utilities for extension context */
+@media (max-width: 400px) {
+  .linkedintel-card {
+    border-radius: var(--linkedintel-radius-md);
+  }
+
+  .linkedintel-card-content {
+    padding: var(--linkedintel-space-sm);
+  }
+
+  .linkedintel-btn {
+    padding: var(--linkedintel-space-xs) var(--linkedintel-space-sm);
+    font-size: var(--linkedintel-font-size-xs);
+  }
+
+  .linkedintel-tech-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+  }
+}
+
+/* Company Intelligence - Pain Points */
+.linkedintel-pain-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.linkedintel-pain-point-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1px solid #fbbf24;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #92400e;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.linkedintel-pain-point-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(251, 191, 36, 0.2);
+  border-color: #f59e0b;
+}
+
+.linkedintel-pain-point-tag svg {
+  width: 12px;
+  height: 12px;
+  stroke: #d97706;
+  flex-shrink: 0;
+}
+
+/* Company Intelligence - Activities Timeline */
+.linkedintel-activities {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+  padding-left: 8px;
+}
+
+.linkedintel-activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+}
+
+.linkedintel-activity-item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 16px;
+  bottom: -12px;
+  width: 2px;
+  background: linear-gradient(180deg, #c7d2fe 0%, transparent 100%);
+}
+
+.linkedintel-activity-bullet {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  margin-top: 2px;
+}
+
+.linkedintel-activity-text {
+  flex: 1;
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+/* Company Intelligence - Context Box */
+.linkedintel-context-box {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+  border: 1px solid #c4b5fd;
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #4c1d95;
+  line-height: 1.6;
+  box-shadow: 0 1px 3px rgba(196, 181, 253, 0.1);
+}
+
+/* Company Intelligence - Executive Quotes */
+.linkedintel-quotes {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.linkedintel-quote-card {
+  position: relative;
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #6366f1;
+  border-radius: 8px;
+  padding: 16px 16px 16px 52px;
+  transition: all 0.2s ease;
+}
+
+.linkedintel-quote-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-left-color: #4f46e5;
+}
+
+.linkedintel-quote-mark {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #c7d2fe;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+
+.linkedintel-quote-text {
+  font-size: 13px;
+  color: #1f2937;
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.linkedintel-quote-attribution {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.linkedintel-quote-source {
+  color: #9ca3af;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.linkedintel-quote-date {
+  color: #9ca3af;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.linkedintel-quote-date::before {
+  content: '•';
+  margin-right: 6px;
+  color: #d1d5db;
+}
+
+/* ========================================
+   CITATION SYSTEM
+   ======================================== */
+
+/* Citation Superscripts - Inline References */
+.linkedintel-citation {
+  display: inline-block;
+  color: #0066cc;
+  font-size: 10px;
+  font-weight: 600;
+  vertical-align: super;
+  cursor: pointer;
+  padding: 1px 4px;
+  margin: 0 1px;
+  background: rgba(0, 102, 204, 0.08);
+  border-radius: 3px;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.linkedintel-citation:hover {
+  background: rgba(0, 102, 204, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 1px 3px rgba(0, 102, 204, 0.2);
+}
+
+.linkedintel-citation:active {
+  transform: translateY(0);
+  background: rgba(0, 102, 204, 0.2);
+}
+
+/* Citation without link (no URL available) */
+.linkedintel-citation-nolink {
+  display: inline-block;
+  color: #6c757d;
+  font-size: 10px;
+  font-weight: 600;
+  vertical-align: super;
+  padding: 1px 4px;
+  margin: 0 1px;
+  background: rgba(108, 117, 125, 0.08);
+  border-radius: 3px;
+  line-height: 1;
+  cursor: help;
+}
+
+/* Citation title for items without URLs */
+.linkedintel-citation-title {
+  color: #495057;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Citation Footnotes Section */
+.linkedintel-citations-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid #e9ecef;
+  background: linear-gradient(180deg, transparent 0%, rgba(248, 249, 250, 0.5) 100%);
+  animation: linkedintel-citation-section-fadein 0.3s ease;
+}
+
+@keyframes linkedintel-citation-section-fadein {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.linkedintel-citations-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.linkedintel-citation-icon {
+  width: 20px;
+  height: 20px;
+  color: #495057;
+  flex-shrink: 0;
+}
+
+.linkedintel-citations-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #212529;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.linkedintel-citations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.linkedintel-citation-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  transition: all 0.2s ease;
+  scroll-margin-top: 20px; /* For smooth scroll */
+}
+
+.linkedintel-citation-item:hover {
+  border-color: #0066cc;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+  transform: translateX(2px);
+}
+
+.linkedintel-citation-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #0066cc 0%, #004a99 100%);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 102, 204, 0.2);
+}
+
+.linkedintel-citation-content {
+  flex: 1;
+  min-width: 0; /* Allow text wrapping */
+}
+
+.linkedintel-citation-link {
+  display: block;
+  color: #0066cc;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  word-wrap: break-word;
+  line-height: 1.4;
+  margin-bottom: 4px;
+  transition: color 0.15s ease;
+}
+
+.linkedintel-citation-link:hover {
+  color: #004a99;
+  text-decoration: underline;
+}
+
+.linkedintel-citation-snippet {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: #6c757d;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Citation Highlight Animation */
+@keyframes linkedintel-highlight-citation {
+  0%, 100% { 
+    background: white;
+    border-color: #dee2e6;
+  }
+  50% { 
+    background: rgba(0, 102, 204, 0.15);
+    border-color: #0066cc;
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+  }
+}
+
+/* ===== ENHANCED ANIMATIONS & TRANSITIONS (Sprint 2) ===== */
+
+/* Shimmer Loading Animation for Skeleton Screens */
+@keyframes linkedintel-shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.linkedintel-skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0%,
+    #f8f8f8 50%,
+    #f0f0f0 100%
+  );
+  background-size: 1000px 100%;
+  animation: linkedintel-shimmer 2s infinite linear;
+  border-radius: 8px;
+}
+
+/* Fade + Slide In Animation for Tab Content */
+@keyframes linkedintel-fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.linkedintel-tab-content.active {
+  animation: linkedintel-fade-slide-in 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Stagger animation for child elements */
+.linkedintel-stagger-children > * {
+  opacity: 0;
+  animation: linkedintel-fade-slide-in 400ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.linkedintel-stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.linkedintel-stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+.linkedintel-stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+.linkedintel-stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+.linkedintel-stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+.linkedintel-stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+
+/* Pulse Animation for Alerts and Critical Items */
+@keyframes linkedintel-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.linkedintel-pulse {
+  animation: linkedintel-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Checkmark Draw Animation */
+@keyframes linkedintel-checkmark-draw {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.linkedintel-checkmark {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: linkedintel-checkmark-draw 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Error Shake Animation */
+@keyframes linkedintel-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+.linkedintel-shake {
+  animation: linkedintel-shake 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced Card Hover States */
+.linkedintel-card {
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.linkedintel-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Enhanced Button Hover States */
+.linkedintel-btn:hover:not(:disabled) {
+  transform: scale(1.02);
+}
+
+.linkedintel-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Tab Button Enhanced Active State */
+.linkedintel-tab-btn.active {
+  border-left: 4px solid var(--linkedintel-primary);
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.08) 0%, transparent 100%);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.linkedintel-tab-btn:hover {
+  background: rgba(59, 130, 246, 0.04);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Modern Card Shadows and Borders */
+.linkedintel-info-box,
+.linkedintel-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+}
+
+/* Gradient Backgrounds for Important Cards */
+.linkedintel-deal-banner {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+/* Risk Signal Glow Animation */
+@keyframes linkedintel-risk-glow {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+  }
+  50% {
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.4);
+  }
+}
+
+.linkedintel-risk-critical {
+  animation: linkedintel-risk-glow 2s ease-in-out infinite;
+}
+
+/* Smooth Scroll Behavior */
+.linkedintel-panel-body {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced Loading State */
+.linkedintel-loading-icon {
+  animation: linkedintel-pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Number Counter Animation */
+@keyframes linkedintel-count-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.linkedintel-stat-value {
+  animation: linkedintel-count-up 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Badge Pulse on Update */
+@keyframes linkedintel-badge-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.linkedintel-tab-badge {
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.linkedintel-tab-badge.updated {
+  animation: linkedintel-badge-pulse 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Link Underline Slide Animation */
+.linkedintel-citation-link {
+  position: relative;
+}
+
+.linkedintel-citation-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #0066cc;
+  transition: width 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.linkedintel-citation-link:hover::after {
+  width: 100%;
+}
+
+/* Tooltip Fade + Scale Animation */
+@keyframes linkedintel-tooltip-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+[data-linkedintel-tooltip] {
+  position: relative;
+}
+
+[data-linkedintel-tooltip]::before {
+  content: attr(data-linkedintel-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  font-size: 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  animation: linkedintel-tooltip-in 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-linkedintel-tooltip]:hover::before {
+  opacity: 1;
+}
+
+/* Modal Backdrop Fade */
+@keyframes linkedintel-backdrop-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.linkedintel-backdrop {
+  animation: linkedintel-backdrop-fade 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Panel Slide In Animation */
+@keyframes linkedintel-panel-slide {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.linkedintel-insights-panel {
+  animation: linkedintel-panel-slide 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Success State Animation */
+@keyframes linkedintel-success-bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.linkedintel-success {
+  animation: linkedintel-success-bounce 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Progress Bar Fill Animation */
+@keyframes linkedintel-progress-fill {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+.linkedintel-progress-fill {
+  animation: linkedintel-progress-fill 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =======================
+   NEW: UI Refactor Components
+   ======================= */
+
+/* Company Description */
+.linkedintel-company-description {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--linkedintel-text-primary);
+  margin: 0;
+  text-align: justify;
+}
+
+/* Competitors Grid */
+.linkedintel-competitors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.linkedintel-competitor-chip {
+  background: linear-gradient(135deg, #f0f4ff 0%, #e6efff 100%);
+  border: 1px solid #c7d7ff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e40af;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.linkedintel-competitor-chip:hover {
+  background: linear-gradient(135deg, #e6efff 0%, #dbe7ff 100%);
+  border-color: #b3ccff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(30, 64, 175, 0.1);
+}
+
+/* Customers Grid */
+.linkedintel-customers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.linkedintel-customer-chip {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #15803d;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.linkedintel-customer-chip:hover {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border-color: #86efac;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(21, 128, 61, 0.1);
+}
+
+/* Case Study Card */
+.linkedintel-case-study-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+.linkedintel-case-study-card:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
+}
+
+.linkedintel-case-study-company {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.linkedintel-case-study-description {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #64748b;
+  margin: 0 0 12px 0;
+}
+
+.linkedintel-case-study-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #3b82f6;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.linkedintel-case-study-link:hover {
+  color: #2563eb;
+}
+
+.linkedintel-external-icon {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2px;
+}
+
+/* Tech Stack Grid */
+.linkedintel-tech-stack-grid {
+  display: grid;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.linkedintel-tech-category {
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.linkedintel-tech-category:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.linkedintel-tech-category-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #e5e7eb;
+  letter-spacing: -0.01em;
+}
+
+.linkedintel-tech-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.linkedintel-tech-tool-chip {
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.linkedintel-tech-tool-chip:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+/* Tech chip with job data */
+.linkedintel-tech-tool-chip.with-data {
+  background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+  border-color: #fbbf24;
+  padding: 12px 16px;
+}
+
+.linkedintel-tech-tool-chip.with-data:hover {
+  background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
+  border-color: #f59e0b;
+}
+
+.linkedintel-tech-chip-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.linkedintel-tech-chip-header .linkedintel-tech-name {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Financial Summary */
+.linkedintel-financial-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.linkedintel-financial-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 6px;
+  border-left: 3px solid #cbd5e1;
+  transition: all 0.2s ease;
+}
+
+.linkedintel-financial-metric:hover {
+  background: #f1f5f9;
+  border-left-color: #94a3b8;
+}
+
+.linkedintel-financial-metric.linkedintel-metric-full {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.linkedintel-metric-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.linkedintel-metric-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.linkedintel-metric-value.linkedintel-metric-success {
+  color: #15803d;
+}
+
+.linkedintel-metric-value.linkedintel-metric-danger {
+  color: #dc2626;
+}
+
+.linkedintel-metric-value.linkedintel-metric-neutral {
+  color: #64748b;
+}
+
+.linkedintel-sentiment-reason {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #64748b;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Risk Signals Tab */
+.linkedintel-risk-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.linkedintel-risk-success-icon {
+  width: 64px;
+  height: 64px;
+  color: #10b981;
+  margin-bottom: 16px;
+  stroke-width: 2px;
+}
+
+.linkedintel-risk-success-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #15803d;
+  margin: 0 0 8px 0;
+}
+
+.linkedintel-risk-success-text {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+.linkedintel-risk-header {
+  margin-bottom: 16px;
+}
+
+.linkedintel-risk-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.linkedintel-risk-badge.linkedintel-risk-danger {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.linkedintel-risk-badge.linkedintel-risk-warning {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
+  border: 1px solid #fbbf24;
+}
+
+.linkedintel-risk-badge.linkedintel-risk-neutral {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.linkedintel-risk-signal-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left-width: 4px;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+.linkedintel-risk-signal-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.linkedintel-risk-signal-card.linkedintel-risk-critical {
+  border-left-color: #dc2626;
+  background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+}
+
+.linkedintel-risk-signal-card.linkedintel-risk-high {
+  border-left-color: #ea580c;
+  background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+}
+
+.linkedintel-risk-signal-card.linkedintel-risk-medium {
+  border-left-color: #f59e0b;
+  background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+}
+
+.linkedintel-risk-signal-card.linkedintel-risk-low {
+  border-left-color: #94a3b8;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.linkedintel-risk-signal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.linkedintel-risk-category {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.5px;
+}
+
+.linkedintel-risk-severity {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #475569;
+  text-transform: uppercase;
+}
+
+.linkedintel-risk-signal-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1e293b;
+  margin: 0 0 12px 0;
+  font-weight: 500;
+}
+
+.linkedintel-risk-signal-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.linkedintel-risk-date,
+.linkedintel-risk-source {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.linkedintel-risk-implication {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #475569;
+  margin: 0;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.linkedintel-risk-factors-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.linkedintel-risk-factor-item {
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #f59e0b;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.linkedintel-risk-factor-item:hover {
+  background: #fffbeb;
+  border-left-color: #d97706;
+  transform: translateX(2px);
+}
+
+/* ========================================
+   UI AUDIT IMPROVEMENTS - October 2025
+   ======================================== */
+
+.linkedintel-tech-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.linkedintel-tech-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.linkedintel-job-count {
+  font-weight: 600;
+  color: #374151;
+}
+
+.linkedintel-last-post {
+  color: #6b7280;
+  font-size: 11px;
+}
+
+.linkedintel-hiring-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid;
+}
+
+.linkedintel-hiring-badge.hot {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+
+.linkedintel-hiring-badge.warm {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
+  border-color: #fbbf24;
+}
+
+/* Contact Information Placeholder */
+.linkedintel-info-placeholder {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-left: 3px solid #3b82f6;
+  border-radius: 8px;
+  margin: 1rem;
+}
+
+.linkedintel-info-icon-wrapper {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 50%;
+}
+
+.linkedintel-info-icon {
+  width: 20px;
+  height: 20px;
+  color: #3b82f6;
+}
+
+.linkedintel-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.linkedintel-info-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.linkedintel-info-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Financial Section Enhancements */
+.linkedintel-financial-context {
+  margin: 0.5rem 0 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #475569;
+  font-style: italic;
+}
+
+/* Financial Metrics Grid - Card-based Layout */
+.linkedintel-financial-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.linkedintel-financial-stat-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px 14px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.linkedintel-financial-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #cbd5e1;
+  transition: all 0.3s ease;
+}
+
+.linkedintel-financial-stat-card:hover {
+  border-color: #4c6ef5;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(76, 110, 245, 0.1);
+}
+
+.linkedintel-financial-stat-card:hover::before {
+  height: 4px;
+  background: linear-gradient(90deg, #4c6ef5 0%, #3b82f6 100%);
+}
+
+/* Success/Danger variants for stat cards */
+.linkedintel-financial-stat-card.linkedintel-stat-success::before {
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+}
+
+.linkedintel-financial-stat-card.linkedintel-stat-danger::before {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+.linkedintel-financial-stat-card.linkedintel-stat-neutral::before {
+  background: linear-gradient(90deg, #94a3b8 0%, #64748b 100%);
+}
+
+.linkedintel-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.linkedintel-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+.linkedintel-financial-stat-card.linkedintel-stat-success .linkedintel-stat-value {
+  color: #15803d;
+}
+
+.linkedintel-financial-stat-card.linkedintel-stat-danger .linkedintel-stat-value {
+  color: #dc2626;
+}
+
+.linkedintel-financial-stat-card.linkedintel-stat-neutral .linkedintel-stat-value {
+  color: #64748b;
+}
+
+/* Financial Info Card - For longer text content */
+.linkedintel-financial-info-card {
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+.linkedintel-financial-info-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.linkedintel-info-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.linkedintel-info-card-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.linkedintel-info-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.linkedintel-info-card-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #475569;
+  margin: 0;
+}
+
+/* Financial Sentiment Card - Prominent display */
+.linkedintel-financial-sentiment-card {
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.linkedintel-financial-sentiment-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  transition: all 0.3s ease;
+}
+
+.linkedintel-financial-sentiment-card.linkedintel-sentiment-success::before {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+}
+
+.linkedintel-financial-sentiment-card.linkedintel-sentiment-danger::before {
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+}
+
+.linkedintel-financial-sentiment-card.linkedintel-sentiment-neutral::before {
+  background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+}
+
+.linkedintel-sentiment-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.linkedintel-sentiment-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.linkedintel-sentiment-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.linkedintel-sentiment-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.linkedintel-financial-sentiment-card.linkedintel-sentiment-success .linkedintel-sentiment-value {
+  color: #15803d;
+}
+
+.linkedintel-financial-sentiment-card.linkedintel-sentiment-danger .linkedintel-sentiment-value {
+  color: #dc2626;
+}
+
+.linkedintel-financial-sentiment-card.linkedintel-sentiment-neutral .linkedintel-sentiment-value {
+  color: #64748b;
+}
+
+.linkedintel-financial-sentiment-card .linkedintel-sentiment-reason {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #475569;
+  margin: 0;
+  padding-left: 44px; /* Align with text above icon */
+}
+
+/* Performance Indicators Badge Section */
+.linkedintel-performance-indicators {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.linkedintel-performance-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid;
+  transition: all 0.2s ease;
+}
+
+.linkedintel-performance-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.linkedintel-badge-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.linkedintel-badge-label {
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+/* Badge Color Variants */
+.linkedintel-performance-badge.linkedintel-badge-success {
+  background: #d3f9d8;
+  border-color: #2b8a3e;
+  color: #2b8a3e;
+}
+
+.linkedintel-performance-badge.linkedintel-badge-danger {
+  background: #ffe3e3;
+  border-color: #c92a2a;
+  color: #c92a2a;
+}
+
+.linkedintel-performance-badge.linkedintel-badge-warning {
+  background: #fff3bf;
+  border-color: #f08c00;
+  color: #e67700;
+}
+
+.linkedintel-performance-badge.linkedintel-badge-info {
+  background: #d0ebff;
+  border-color: #1971c2;
+  color: #1971c2;
+}
+
+/* Industry Stat Card Special Styling */
+.linkedintel-financial-stat-card.linkedintel-stat-industry .linkedintel-stat-value {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Private Company Funding Card */
+.linkedintel-funding-card {
+  background: linear-gradient(135deg, #fff8e1 0%, #ffe9a3 100%);
+  border: 2px solid #f59e0b;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.linkedintel-funding-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+}
+
+.linkedintel-funding-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2);
+}
+
+.linkedintel-funding-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.linkedintel-funding-icon {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.linkedintel-funding-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #92400e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.linkedintel-funding-amount {
+  font-size: 26px;
+  font-weight: 700;
+  color: #92400e;
+  line-height: 1.2;
+}
+
+.linkedintel-funding-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+}
+
+.linkedintel-funding-date-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.linkedintel-funding-date-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #78350f;
+}
+
+.linkedintel-funding-investors {
+  margin-top: 12px;
+}
+
+.linkedintel-funding-investors-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #92400e;
+  margin-bottom: 8px;
+}
+
+.linkedintel-investor-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.linkedintel-investor-pill {
+  background: #ffffff;
+  border: 2px solid #fbbf24;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #92400e;
+  transition: all 0.2s ease;
+}
+
+.linkedintel-investor-pill:hover {
+  background: #fef3c7;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+}
+
+/* Revenue Growth Card with Direction Colors */
+.linkedintel-revenue-growth-card.linkedintel-card-success {
+  border-left: 4px solid #10b981;
+}
+
+.linkedintel-revenue-growth-card.linkedintel-card-danger {
+  border-left: 4px solid #ef4444;
+}
+
+.linkedintel-revenue-growth-card.linkedintel-card-neutral {
+  border-left: 4px solid #94a3b8;
+}
+
+/* Citation Styling - Subtle and Less Prominent */
+.li-citation,
+sup {
+  font-size: 0.7em;
+  opacity: 0.5;
+  font-weight: 400;
+  vertical-align: super;
+  color: #94a3b8;
+  transition: opacity 0.2s ease;
+  cursor: help;
+}
+
+.li-citation:hover,
+sup:hover {
+  opacity: 0.8;
+}
+
+/* SDR VALUE Boxes - Reduced Saturation */
+.linkedintel-sdr-value-box,
+.linkedintel-info-box.success {
+  background: #d1fae5 !important; /* Lighter, less saturated green */
+  border-left: 3px solid #10b981;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.linkedintel-sdr-value-label {
+  color: #047857; /* Darker green for better contrast */
+  font-weight: 600;
+}
+
+/* Empty States - More Elegant */
+.linkedintel-empty-state {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+}
+
+.linkedintel-empty-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1rem auto;
+  color: #94a3b8;
+}
+
+.linkedintel-empty-text {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Skeleton Loader */
+.linkedintel-skeleton-card {
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.linkedintel-skeleton-header {
+  width: 40%;
+  height: 20px;
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.linkedintel-skeleton-line {
+  width: 100%;
+  height: 14px;
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.linkedintel-skeleton-line.short {
+  width: 60%;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Error State */
+.linkedintel-error-state {
+  padding: 2rem 1.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+}
+
+.linkedintel-error-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1rem auto;
+  color: #ef4444;
+}
+
+.linkedintel-error-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #dc2626;
+  margin: 0 0 0.5rem 0;
+}
+
+.linkedintel-error-message {
+  font-size: 14px;
+  color: #991b1b;
+  margin: 0 0 1rem 0;
+}
+
+.linkedintel-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #dc2626;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.linkedintel-retry-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+}
+
+.linkedintel-retry-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Citation Markers and Footnotes */
+.linkedintel-citation {
+  color: var(--linkedintel-primary);
+  font-weight: 600;
+  font-size: 0.75em;
+  margin-left: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.linkedintel-citation:hover {
+  color: var(--linkedintel-primary-dark);
+  text-decoration: underline;
+}
+
+.linkedintel-footnotes {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--linkedintel-border-secondary);
+}
+
+.linkedintel-footnotes-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--linkedintel-text-secondary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.linkedintel-footnote {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-size: 0.875rem;
+  color: var(--linkedintel-text-tertiary);
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.linkedintel-footnote-number {
+  color: var(--linkedintel-primary);
+  font-weight: 600;
+  flex-shrink: 0;
+  min-width: 24px;
+}
+
+.linkedintel-footnote-link {
+  color: var(--linkedintel-text-tertiary);
+  text-decoration: none;
+  word-break: break-all;
+  transition: color 0.2s ease;
+}
+
+.linkedintel-footnote-link:hover {
+  color: var(--linkedintel-primary);
+  text-decoration: underline;
+}

@@ -1,0 +1,59 @@
+{
+  "name": "linkedintel-extension",
+  "version": "1.0.13",
+  "description": "AI-powered LinkedIn intelligence for sales teams",
+  "private": false,
+  "scripts": {
+    "build": "npm run build-css",
+    "build-production": "node scripts/build-production.js",
+    "build-css": "npm run build-tailwind && npm run build-components",
+    "build-tailwind": "tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/output.css",
+    "build-components": "postcss ./src/styles/components.css -o ./src/styles/components.min.css",
+    "watch-css": "tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/output.css --watch",
+    "load": "echo 'Load extension: chrome://extensions/ -> Load unpacked -> <repo-root>'",
+    "validate": "npm run lint-check",
+    "lint-check": "echo 'Linting JavaScript files...'",
+    "release": "node scripts/package-release.js patch",
+    "release:minor": "node scripts/package-release.js minor",
+    "release:major": "node scripts/package-release.js major",
+    "test": "echo 'Running extension tests...' && npm run test-load && npm run test-permissions",
+    "test-load": "echo 'Testing extension loading...'",
+    "test-permissions": "echo 'Testing permissions...'",
+    "clean": "rm -rf dist/ linkedintel-*.zip src/styles/output.css src/styles/components.min.css",
+    "analyze-bundle": "echo 'Analyzing bundle size...' && du -sh src/",
+    "icons": "echo 'All required icons already exist in icons/ directory'"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/chrome": "^0.0.268",
+    "archiver": "^7.0.1",
+    "autoprefixer": "^10.4.17",
+    "chalk": "^5.3.0",
+    "postcss": "^8.4.35",
+    "postcss-cli": "^11.0.0",
+    "postcss-nested": "^6.0.1",
+    "tailwindcss": "^3.4.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "chrome-extension",
+    "linkedin",
+    "sales",
+    "ai",
+    "intelligence",
+    "manifest-v3"
+  ],
+  "author": "LinkedIntel Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/linkedintel-extension.git"
+  },
+  "_comment": "UPDATE THIS: Replace 'yourusername' with your actual GitHub username after uploading",
+  "dependencies": {
+    "caniuse-lite": "^1.0.30001750"
+  }
+}

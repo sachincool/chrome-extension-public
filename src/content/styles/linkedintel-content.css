@@ -1,0 +1,274 @@
+/* LinkedIntel Content Script Styles */
+/* Minimal, scoped styles for content script injections */
+
+/* Namespace all LinkedIntel styles to avoid conflicts */
+.linkedintel-overlay,
+.linkedintel-notification,
+.linkedintel-badge,
+.linkedintel-tooltip {
+  /* Reset and base styles */
+  all: initial;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  box-sizing: border-box !important;
+  z-index: 999999 !important;
+  position: relative !important;
+}
+
+/* Floating notification for page detection */
+.linkedintel-page-notification {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  background: linear-gradient(135deg, #0a66c2 0%, #004182 100%) !important;
+  color: white !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  z-index: 999999 !important;
+  transform: translateX(400px) !important;
+  transition: transform 0.3s ease !important;
+  cursor: pointer !important;
+  max-width: 300px !important;
+  line-height: 1.4 !important;
+}
+
+.linkedintel-page-notification.visible {
+  transform: translateX(0) !important;
+}
+
+.linkedintel-page-notification:hover {
+  transform: translateX(0) scale(1.02) !important;
+}
+
+.linkedintel-notification-content {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.linkedintel-notification-icon {
+  font-size: 16px !important;
+  flex-shrink: 0 !important;
+}
+
+.linkedintel-notification-text {
+  flex: 1 !important;
+}
+
+.linkedintel-notification-close {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  color: white !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  margin-left: 8px !important;
+  padding: 4px 6px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.linkedintel-notification-close:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Badge for profiles/companies */
+.linkedintel-analysis-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: #f8f9fa !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 16px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #666 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  margin-left: 8px !important;
+  vertical-align: middle !important;
+}
+
+.linkedintel-analysis-badge:hover {
+  background: #e9ecef !important;
+  border-color: #0a66c2 !important;
+  color: #0a66c2 !important;
+}
+
+.linkedintel-analysis-badge.analyzing {
+  background: #fff3cd !important;
+  border-color: #ffeaa7 !important;
+  color: #856404 !important;
+}
+
+.linkedintel-analysis-badge.analyzed {
+  background: #d1edff !important;
+  border-color: #0a66c2 !important;
+  color: #0a66c2 !important;
+}
+
+.linkedintel-badge-icon {
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+
+.linkedintel-badge-text {
+  white-space: nowrap !important;
+}
+
+/* Tooltip styles */
+.linkedintel-tooltip {
+  position: absolute !important;
+  background: #1a1a1a !important;
+  color: white !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
+  z-index: 999999 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.2s ease !important;
+  transform: translateY(-100%) translateX(-50%) !important;
+  top: -8px !important;
+  left: 50% !important;
+}
+
+.linkedintel-tooltip::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 50% !important;
+  border: 4px solid transparent !important;
+  border-top-color: #1a1a1a !important;
+  transform: translateX(-50%) !important;
+}
+
+.linkedintel-tooltip.visible {
+  opacity: 1 !important;
+}
+
+/* Loading spinner for analysis */
+.linkedintel-spinner {
+  display: inline-block !important;
+  width: 12px !important;
+  height: 12px !important;
+  border: 2px solid #e0e0e0 !important;
+  border-radius: 50% !important;
+  border-top-color: #0a66c2 !important;
+  animation: linkedintel-spin 0.8s linear infinite !important;
+}
+
+@keyframes linkedintel-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pulse animation for notifications */
+.linkedintel-pulse {
+  animation: linkedintel-pulse 2s infinite !important;
+}
+
+@keyframes linkedintel-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Slide in animation */
+.linkedintel-slide-in {
+  animation: linkedintel-slide-in 0.3s ease-out !important;
+}
+
+@keyframes linkedintel-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Fade in animation */
+.linkedintel-fade-in {
+  animation: linkedintel-fade-in 0.3s ease-out !important;
+}
+
+@keyframes linkedintel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .linkedintel-page-notification {
+    right: 10px !important;
+    top: 10px !important;
+    max-width: calc(100vw - 40px) !important;
+    font-size: 13px !important;
+    padding: 10px 12px !important;
+  }
+  
+  .linkedintel-analysis-badge {
+    font-size: 11px !important;
+    padding: 3px 6px !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .linkedintel-analysis-badge {
+    background: #2a2a2a !important;
+    border-color: #444 !important;
+    color: #ccc !important;
+  }
+  
+  .linkedintel-analysis-badge:hover {
+    background: #333 !important;
+    border-color: #5890ff !important;
+    color: #5890ff !important;
+  }
+  
+  .linkedintel-analysis-badge.analyzed {
+    background: #1e3a52 !important;
+    border-color: #5890ff !important;
+    color: #5890ff !important;
+  }
+}
+
+/* Hide styles - utility class */
+.linkedintel-hidden {
+  display: none !important;
+}
+
+/* Prevent text selection on interactive elements */
+.linkedintel-no-select {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+/* Ensure proper stacking context */
+.linkedintel-layer {
+  isolation: isolate !important;
+}
