@@ -6841,7 +6841,7 @@ class LinkedIntelInsightsPanel {
                   <p style="margin: 0 0 8px 40px; font-size: 13px; color: #495057; line-height: 1.6;">
                     Open DevTools (F12), paste this in the Console, and press Enter:
                   </p>
-                  <pre style="margin: 0 0 0 40px; background: #1e1e1e; color: #d4d4d4; padding: 12px; border-radius: 8px; font-size: 12px; font-family: 'Courier New', monospace; overflow-x: auto;">await ai.languageModel.create();</pre>
+                  <pre style="margin: 0 0 0 40px; background: #1e1e1e; color: #d4d4d4; padding: 12px; border-radius: 8px; font-size: 12px; font-family: 'Courier New', monospace; overflow-x: auto;">await LanguageModel.create();</pre>
                   <p style="margin: 8px 0 0 40px; font-size: 12px; color: #868e96; line-height: 1.6;">
                     This will download Gemini Nano (~1.5GB) in the background.
                   </p>

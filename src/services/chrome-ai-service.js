@@ -145,6 +145,14 @@ class ChromeAIService {
     return details
   }
 
+  /**
+   * Get availability status with detailed information (synchronous alias)
+   * @returns {Object} Detailed availability information
+   */
+  getDetailedAvailabilitySync() {
+    return this.getDetailedAvailability()
+  }
+
   // ============================================================================
   // SUMMARIZER API
   // ============================================================================

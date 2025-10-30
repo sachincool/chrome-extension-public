@@ -314,5 +314,12 @@
   proxyLogger.info(
     'window.chromeAI proxy available (routes to MAIN world bridge)'
   )
+
+  // Auto-initialize after a short delay to allow MAIN world to load
+  setTimeout(() => {
+    chromeAIProxy.initialize().catch((error) => {
+      proxyLogger.warn('Auto-initialization failed:', error)
+    })
+  }, 500)
 })()
 
