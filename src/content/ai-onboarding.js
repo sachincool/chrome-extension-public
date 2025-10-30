@@ -91,42 +91,43 @@ class AIOnboarding {
    */
   showWelcomeModal() {
     const modal = this.createModal({
-      title: '🎉 Chrome AI Features Enabled!',
+      title: '🎯 Factual Intelligence Enabled!',
       content: `
         <p class="linkedintel-onboarding-intro">
-          LinkedIntel now uses Chrome's built-in AI for instant, on-device intelligence.
+          LinkedIntel extracts <strong>verifiable facts</strong> from LinkedIn profiles using Chrome's built-in AI.
+          No more guessing—every fact includes evidence you can verify.
         </p>
         
         <div class="linkedintel-onboarding-features">
           <div class="linkedintel-onboarding-feature">
-            <div class="linkedintel-onboarding-feature-icon">⚡</div>
+            <div class="linkedintel-onboarding-feature-icon">📊</div>
             <div class="linkedintel-onboarding-feature-text">
-              <strong>Quick Summaries</strong>
-              <span>Instant 3-bullet summaries of any profile or company</span>
+              <strong>Activity Signals</strong>
+              <span>Conferences attended, speaking engagements, awards received</span>
             </div>
           </div>
           
           <div class="linkedintel-onboarding-feature">
-            <div class="linkedintel-onboarding-feature-icon">✍️</div>
+            <div class="linkedintel-onboarding-feature-icon">📈</div>
             <div class="linkedintel-onboarding-feature-text">
-              <strong>Message Composer</strong>
-              <span>Generate personalized outreach in seconds</span>
+              <strong>Buying Signals</strong>
+              <span>Expansion indicators (hiring, funding) vs contraction (layoffs, budget cuts)</span>
             </div>
           </div>
           
           <div class="linkedintel-onboarding-feature">
-            <div class="linkedintel-onboarding-feature-icon">🔄</div>
+            <div class="linkedintel-onboarding-feature-icon">⏱️</div>
             <div class="linkedintel-onboarding-feature-text">
-              <strong>Message Refinement</strong>
-              <span>Rewrite your drafts with different tones</span>
+              <strong>Timeline View</strong>
+              <span>Chronological events with dates and importance ratings</span>
             </div>
           </div>
           
           <div class="linkedintel-onboarding-feature">
-            <div class="linkedintel-onboarding-feature-icon">✓</div>
+            <div class="linkedintel-onboarding-feature-icon">✅</div>
             <div class="linkedintel-onboarding-feature-text">
-              <strong>Grammar Check</strong>
-              <span>Real-time proofreading as you type</span>
+              <strong>Verification Guides</strong>
+              <span>Every fact shows how to verify it independently</span>
             </div>
           </div>
         </div>
@@ -135,7 +136,16 @@ class AIOnboarding {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
-          <span>All processing happens on your device. Your data never leaves your computer.</span>
+          <span><strong>Privacy-first:</strong> Fact extraction happens on your device. No data sent to external servers.</span>
+        </div>
+
+        <div class="linkedintel-onboarding-info" style="margin-top: 16px; padding: 12px; background: #f0f9ff; border-radius: 8px; display: flex; gap: 12px; align-items: start;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; flex-shrink: 0; color: #0369a1;">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+          <span style="font-size: 13px; color: #0369a1;"><strong>How to use:</strong> Look for the "Intelligence" button on any LinkedIn profile. Click it to extract factual signals from recent activity.</span>
         </div>
       `,
       buttons: [
@@ -378,46 +388,19 @@ class AIOnboarding {
           <p><strong>Processing:</strong> 100% on-device, instant, private</p>
         `,
       },
-      writer: {
-        title: '✍️ Message Composer',
+      prompt: {
+        title: '💬 AI Chat & Outreach',
         content: `
-          <p>Generate personalized outreach messages, emails, and LinkedIn InMails.</p>
+          <p>Generate personalized outreach messages and get intelligent chat responses.</p>
           <h4>How to use:</h4>
           <ul>
             <li>Open the Chat tab in the LinkedIntel panel</li>
-            <li>Click "AI Compose" and select message type</li>
-            <li>Choose tone (Professional, Casual, etc.) and length</li>
-            <li>Click "Generate" for instant results</li>
+            <li>Click "AI Compose" to generate outreach messages</li>
+            <li>Choose message type, tone, and length</li>
+            <li>Use "Refine" to adjust tone of existing text</li>
+            <li>Or chat naturally for intelligent responses</li>
           </ul>
-          <p><strong>Processing:</strong> On-device generation with context from page</p>
-        `,
-      },
-      rewriter: {
-        title: '🔄 Message Refinement',
-        content: `
-          <p>Rewrite and improve your draft messages with different tones and styles.</p>
-          <h4>How to use:</h4>
-          <ul>
-            <li>Type your message in the chat input</li>
-            <li>Click the "Refine" button</li>
-            <li>Choose desired tone adjustment</li>
-            <li>Compare before/after and apply changes</li>
-          </ul>
-          <p><strong>Processing:</strong> On-device refinement, maintains your key points</p>
-        `,
-      },
-      proofreader: {
-        title: '✓ Grammar Check',
-        content: `
-          <p>Real-time grammar and spelling checking as you type.</p>
-          <h4>How to use:</h4>
-          <ul>
-            <li>Start typing in any LinkedIntel chat input</li>
-            <li>Errors are underlined automatically</li>
-            <li>Hover over errors to see suggestions</li>
-            <li>Click to apply corrections</li>
-          </ul>
-          <p><strong>Processing:</strong> On-device checking, instant feedback</p>
+          <p><strong>Processing:</strong> On-device generation with full page context</p>
         `,
       },
     };

@@ -1,149 +1,5 @@
 /* Chrome AI Components Styling */
 
-/* AI Summary Badge on LinkedIn Page */
-.linkedintel-ai-summary-badge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 100;
-}
-
-.linkedintel-ai-summary-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
-  transition: all 0.2s ease;
-}
-
-.linkedintel-ai-summary-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.5);
-}
-
-.linkedintel-ai-summary-btn.generating {
-  opacity: 0.7;
-  cursor: wait;
-}
-
-.linkedintel-ai-sparkle {
-  width: 16px;
-  height: 16px;
-  animation: sparkle 2s ease-in-out infinite;
-}
-
-@keyframes sparkle {
-  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
-  50% { transform: scale(1.1) rotate(180deg); opacity: 0.8; }
-}
-
-/* AI Summary Tooltip */
-.linkedintel-ai-summary-tooltip {
-  position: fixed;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  padding: 0;
-  max-width: 400px;
-  z-index: 1000000;
-  animation: tooltipSlideIn 0.3s ease-out;
-}
-
-@keyframes tooltipSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.linkedintel-ai-summary-tooltip.error {
-  border: 2px solid #ef4444;
-}
-
-.linkedintel-ai-summary-tooltip-content {
-  padding: 16px;
-}
-
-.linkedintel-ai-summary-tooltip-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.linkedintel-ai-summary-tooltip-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.linkedintel-ai-summary-tooltip-close {
-  background: transparent;
-  border: none;
-  color: #64748b;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s;
-}
-
-.linkedintel-ai-summary-tooltip-close:hover {
-  color: #0f172a;
-}
-
-.linkedintel-ai-summary-bullets {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 12px 0;
-}
-
-.linkedintel-ai-summary-bullets li {
-  padding: 8px 0 8px 24px;
-  position: relative;
-  color: #475569;
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.linkedintel-ai-summary-bullets li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: #10b981;
-  font-weight: bold;
-}
-
-.linkedintel-ai-summary-footer {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding-top: 12px;
-  border-top: 1px solid #e2e8f0;
-  font-size: 11px;
-  color: #64748b;
-}
-
-.linkedintel-ai-summary-footer svg {
-  width: 14px;
-  height: 14px;
-}
-
 /* AI Status Indicator */
 .linkedintel-ai-status-wrapper {
   margin: 12px 0;
@@ -331,29 +187,43 @@
 }
 
 .linkedintel-ai-model-info.success {
-  background: #f0fdf4;
-  color: #166534;
+  background: #f0fdf4 !important;
+  color: #166534 !important;
+}
+
+.linkedintel-ai-model-info.success * {
+  color: #166534 !important;
 }
 
 .linkedintel-ai-model-info.info {
-  background: #eff6ff;
-  color: #1e40af;
+  background: #eff6ff !important;
+  color: #1e40af !important;
+}
+
+.linkedintel-ai-model-info.info * {
+  color: #1e40af !important;
 }
 
 .linkedintel-ai-model-info.warning {
-  background: #fef3c7;
-  color: #92400e;
+  background: #fef3c7 !important;
+  color: #92400e !important;
+}
+
+.linkedintel-ai-model-info.warning * {
+  color: #92400e !important;
 }
 
 .linkedintel-ai-model-title {
   font-size: 12px;
   font-weight: 600;
   margin-bottom: 4px;
+  color: inherit;
 }
 
 .linkedintel-ai-model-desc {
   font-size: 11px;
   line-height: 1.5;
+  color: inherit;
 }
 
 .linkedintel-ai-badge {
@@ -542,7 +412,19 @@
   align-items: center;
 }
 
-/* Refine Modal Overlay */
+/* Refine Modal */
+.linkedintel-refine-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .linkedintel-refine-overlay {
   position: fixed;
   top: 0;
@@ -552,6 +434,45 @@
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   z-index: 1000000;
+}
+
+.linkedintel-refine-content {
+  position: relative;
+  z-index: 1000001;
+  animation: refineModalSlideUp 0.3s ease-out;
+}
+
+@keyframes refineModalSlideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Refine Modal Components */
+.linkedintel-refine-tone-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.linkedintel-refine-tone-btn:active {
+  transform: translateY(0);
+}
+
+.linkedintel-refine-action-btn:hover {
+  background: #9333ea;
+}
+
+.linkedintel-refine-apply-btn:hover {
+  background: #059669;
+}
+
+.linkedintel-refine-cancel-btn:hover {
+  background: #e2e8f0;
 }
 
 /* Spinner for AI loading states */

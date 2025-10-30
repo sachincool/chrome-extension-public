@@ -201,7 +201,7 @@ async function buildProduction() {
     success = true
     log('Production build completed successfully!')
     log(`Production extension: ${zipName}`)
-    log('API endpoint: configured via EXTENSION_CONFIG in src/background/service-worker.js')
+    log('API endpoint: configured via EXTENSION_CONFIG.API_BASE_URLS.production (default https://api.example.com)')
 
     return zipName
   } catch (err) {

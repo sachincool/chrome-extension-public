@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
   "name": "LinkedIn Sales Intelligence - Lead Research",
-  "version": "1.0.13",
+  "version": "1.0.20",
   "description": "AI-powered sales research for LinkedIn. Get instant prospect intelligence, buying signals, decision makers & tech stack insights.",
   "author": "LinkedIntel Team",
-  "homepage_url": "https://github.com/linkedintel/linkedintel-extension",
+  "homepage_url": "https://github.com/linkedintel/chrome-extension-public-clean",
   "permissions": [
     "activeTab",
     "storage",
@@ -12,8 +12,7 @@
     "alarms",
     "identity",
     "webNavigation",
-    "scripting",
-    "aiLanguageModelOriginTrial"
+    "scripting"
   ],
   "oauth2": {
     "client_id": "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com",
@@ -22,13 +21,13 @@
       "https://www.googleapis.com/auth/userinfo.profile"
     ]
   },
-  "_comment_oauth": "NOTE FOR JUDGES: OAuth is optional for Chrome AI features. All AI features work without authentication. To use backend intelligence features, create OAuth client at: https://console.cloud.google.com/apis/credentials",
+  "_comment_oauth": "OAuth is optional. All Chrome Built-in AI demos work without authentication. Developers can add their own client ID for backend features.",
   "host_permissions": [
     "https://*.linkedin.com/in/*",
     "https://*.linkedin.com/company/*",
     "https://api.example.com/*"
   ],
-  "_comment_api": "NOTE FOR JUDGES: api.example.com is placeholder for optional backend. All Chrome AI features work without backend connection.",
+  "_comment_api": "Replace api.example.com with your backend endpoint if you want to connect to a server. The extension works fully client-side for hackathon judging.",
   "background": {
     "service_worker": "src/background/service-worker.js"
   },
@@ -41,8 +40,24 @@
       "js": [
         "src/shared/logger.js",
         "src/services/chrome-ai-service.js",
+        "src/services/chrome-ai-bridge.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://*.linkedin.com/in/*",
+        "https://*.linkedin.com/company/*"
+      ],
+      "js": [
+        "src/shared/logger.js",
+        "src/services/chrome-ai-proxy.js",
+        "src/services/unified-context-service.js",
+        "src/services/fact-extraction-service.js",
+        "src/content/linkedin-posts-scraper.js",
+        "src/content/factual-intelligence-panel.js",
         "src/content/ai-status-indicator.js",
-        "src/content/ai-summary-badge.js",
         "src/content/ai-onboarding.js",
         "src/content/badge-injector.js",
         "src/content/chat-interface.js",
@@ -58,7 +73,8 @@
         "src/content/styles/badges.css",
         "src/content/styles/shadcn-components.css",
         "src/content/styles/chat-interface.css",
-        "src/content/styles/chrome-ai.css"
+        "src/content/styles/chrome-ai.css",
+        "src/content/styles/factual-intelligence.css"
       ],
       "run_at": "document_idle"
     }
@@ -88,5 +104,5 @@
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
   "trial_tokens": [],
-  "_comment_trial_tokens": "NOTE FOR JUDGES: Origin trial tokens are optional. Chrome Built-in AI features work without tokens when Chrome flags are enabled (see SETUP.md)."
+  "_comment_trial_tokens": "Origin trial tokens are intentionally omitted. Enable Chrome Built-in AI flags locally when testing or add your own token."
 }

@@ -101,6 +101,8 @@ class LinkedInDetector {
         this.notifyServiceWorker('LINKEDIN_PAGE_DETECTED', data)
         // Ensure FAB is present on profile pages
         this.ensureFAB()
+        // Inject CXO badge if profile is an executive
+        this.injectCXOBadge()
       } else {
         // Profile data not loaded yet, try again shortly
         this.extractionTimeout = setTimeout(extractProfileData, 1000)
@@ -166,10 +168,70 @@ class LinkedInDetector {
     for (const selector of selectors) {
       const element = document.querySelector(selector)
       if (element && element.textContent && element.textContent.trim()) {
-        return element.textContent.trim()
+        // Sanitize the name to remove emojis and invalid characters
+        return this.sanitizeName(element.textContent.trim())
       }
     }
     return null
+  }
+
+  /**
+   * Sanitize name by removing emojis and invalid characters
+   * Keeps letters, spaces, hyphens, apostrophes, periods, commas, parentheses, and professional suffixes
+   * @param {string} name - Raw name from LinkedIn
+   * @returns {string} Sanitized name
+   */
+  sanitizeName(name) {
+    if (!name) return name
+
+    // Remove emojis and special symbols
+    // This regex matches and removes:
+    // - Emoji pictographs
+    // - Emoji modifiers
+    // - Various symbol ranges
+    // - Dingbats and misc symbols
+    const emojiRegex = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA70}-\u{1FAFF}]|[\u{FE00}-\u{FE0F}]|[\u{2300}-\u{23FF}]|[\u{2B50}]|[\u{231A}-\u{231B}]|[\u{23E9}-\u{23EC}]|[\u{23F0}]|[\u{23F3}]|[\u{25FD}-\u{25FE}]|[\u{2614}-\u{2615}]|[\u{2648}-\u{2653}]|[\u{267F}]|[\u{2693}]|[\u{26A1}]|[\u{26AA}-\u{26AB}]|[\u{26BD}-\u{26BE}]|[\u{26C4}-\u{26C5}]|[\u{26CE}]|[\u{26D4}]|[\u{26EA}]|[\u{26F2}-\u{26F3}]|[\u{26F5}]|[\u{26FA}]|[\u{26FD}]|[\u{2705}]|[\u{270A}-\u{270B}]|[\u{2728}]|[\u{274C}]|[\u{274E}]|[\u{2753}-\u{2755}]|[\u{2757}]|[\u{2795}-\u{2797}]|[\u{27B0}]|[\u{27BF}]|[\u{2B1B}-\u{2B1C}]|[\u{1F004}]|[\u{1F0CF}]/gu
+    
+    let sanitized = name.replace(emojiRegex, '').trim()
+
+    // Remove any remaining non-standard characters while preserving:
+    // - Letters (including international)
+    // - Spaces, hyphens, apostrophes, periods, commas, parentheses
+    // - Professional suffixes
+    sanitized = sanitized.replace(/[^\p{L}\p{M}\s\-'.,()\u00C0-\u017F\u0100-\u024F\u1E00-\u1EFF]/gu, '').trim()
+
+    // Collapse multiple spaces into one
+    sanitized = sanitized.replace(/\s+/g, ' ')
+
+    detectorLogger.debug(`[LinkedIntel] Sanitized name: "${name}" -> "${sanitized}"`)
+    
+    return sanitized
+  }
+
+  /**
+   * Sanitize company name by removing emojis and invalid characters
+   * Backend allows: alphanumeric, spaces, hyphens, ampersands, periods, commas, parentheses
+   * @param {string} name - Raw company name from LinkedIn
+   * @returns {string} Sanitized company name
+   */
+  sanitizeCompanyName(name) {
+    if (!name) return name
+
+    // Remove emojis using the same comprehensive regex
+    const emojiRegex = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA70}-\u{1FAFF}]|[\u{FE00}-\u{FE0F}]|[\u{2300}-\u{23FF}]|[\u{2B50}]|[\u{231A}-\u{231B}]|[\u{23E9}-\u{23EC}]|[\u{23F0}]|[\u{23F3}]|[\u{25FD}-\u{25FE}]|[\u{2614}-\u{2615}]|[\u{2648}-\u{2653}]|[\u{267F}]|[\u{2693}]|[\u{26A1}]|[\u{26AA}-\u{26AB}]|[\u{26BD}-\u{26BE}]|[\u{26C4}-\u{26C5}]|[\u{26CE}]|[\u{26D4}]|[\u{26EA}]|[\u{26F2}-\u{26F3}]|[\u{26F5}]|[\u{26FA}]|[\u{26FD}]|[\u{2705}]|[\u{270A}-\u{270B}]|[\u{2728}]|[\u{274C}]|[\u{274E}]|[\u{2753}-\u{2755}]|[\u{2757}]|[\u{2795}-\u{2797}]|[\u{27B0}]|[\u{27BF}]|[\u{2B1B}-\u{2B1C}]|[\u{1F004}]|[\u{1F0CF}]/gu
+    
+    let sanitized = name.replace(emojiRegex, '').trim()
+
+    // Backend validation: /^[a-zA-Z0-9\s\-&.,()]+$/
+    // Keep only: alphanumeric, spaces, hyphens, ampersands, periods, commas, parentheses
+    sanitized = sanitized.replace(/[^a-zA-Z0-9\s\-&.,()]/g, '').trim()
+
+    // Collapse multiple spaces into one
+    sanitized = sanitized.replace(/\s+/g, ' ')
+
+    detectorLogger.debug(`[LinkedIntel] Sanitized company name: "${name}" -> "${sanitized}"`)
+    
+    return sanitized
   }
 
   extractProfileHeadline() {
@@ -799,7 +861,8 @@ class LinkedInDetector {
     for (const selector of selectors) {
       const element = document.querySelector(selector)
       if (element && element.textContent && element.textContent.trim()) {
-        return element.textContent.trim()
+        // Sanitize the company name to remove emojis and invalid characters
+        return this.sanitizeCompanyName(element.textContent.trim())
       }
     }
 
@@ -1773,11 +1836,33 @@ class LinkedInDetector {
       })
   }
 
-  // Legacy method - now handled by dedicated badge injector
+  /**
+   * Inject CXO badge for executive profiles
+   * Called when profile page is detected
+   */
   injectCXOBadge() {
-    detectorLogger.debug(
-      'LinkedIntel: Badge injection handled by ExecutiveBadgeInjector'
-    )
+    // Check if we're on a profile page
+    if (!window.location.pathname.includes('/in/')) {
+      return
+    }
+
+    // Ensure badge injector is available
+    if (!window.executiveBadgeInjector) {
+      detectorLogger.warn('LinkedIntel: ExecutiveBadgeInjector not available')
+      return
+    }
+
+    // The badge injector will detect executive level from the page automatically
+    detectorLogger.debug('LinkedIntel: Triggering executive badge injection')
+    
+    try {
+      // Call the badge injector's main method which handles detection and injection
+      window.executiveBadgeInjector.injectExecutiveBadges()
+      
+      detectorLogger.info('LinkedIntel: Executive badge injection completed')
+    } catch (error) {
+      detectorLogger.error('LinkedIntel: Error injecting badge:', error)
+    }
   }
 
   // Helper methods for text validation

@@ -1,6 +1,6 @@
 {
   "name": "linkedintel-extension",
-  "version": "1.0.13",
+  "version": "1.0.20",
   "description": "AI-powered LinkedIn intelligence for sales teams",
   "private": false,
   "scripts": {
@@ -50,9 +50,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/linkedintel-extension.git"
+    "url": "https://github.com/linkedintel/chrome-extension-public-clean.git"
   },
-  "_comment": "UPDATE THIS: Replace 'yourusername' with your actual GitHub username after uploading",
+  "_comment": "Update repository.url with your actual public repository if you fork this project.",
   "dependencies": {
     "caniuse-lite": "^1.0.30001750"
   }

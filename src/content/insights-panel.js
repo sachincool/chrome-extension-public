@@ -39,6 +39,57 @@ class LinkedIntelInsightsPanel {
   }
 
   /**
+   * Extract private company financials from stockInfo for Company Context display
+   * @param {Object} stockInfo - Stock info object
+   * @returns {Object} Private financials object
+   */
+  extractPrivateFinancials(stockInfo) {
+    const financials = {
+      totalFunding: null,
+      latestValuation: null,
+      revenueEstimate: null,
+      fundingRounds: []
+    }
+
+    // Extract from dynamicFinancials array
+    if (stockInfo.dynamicFinancials && Array.isArray(stockInfo.dynamicFinancials)) {
+      stockInfo.dynamicFinancials.forEach(metric => {
+        if (!metric || !metric.label || !metric.value) return
+
+        const label = metric.label.toLowerCase()
+        
+        // Map dynamic financials to expected fields
+        if (label.includes('total') && (label.includes('funding') || label.includes('raised'))) {
+          financials.totalFunding = metric.value
+        } else if (label.includes('valuation')) {
+          financials.latestValuation = metric.value
+        } else if (label.includes('revenue')) {
+          financials.revenueEstimate = metric.value
+        }
+      })
+    }
+
+    // Also extract from direct properties as fallback
+    if (!financials.totalFunding && stockInfo.totalFunding) {
+      financials.totalFunding = stockInfo.totalFunding
+    }
+    if (!financials.latestValuation && stockInfo.latestValuation) {
+      financials.latestValuation = stockInfo.latestValuation
+    }
+
+    // Extract funding rounds
+    if (stockInfo.fundingRounds && Array.isArray(stockInfo.fundingRounds)) {
+      financials.fundingRounds = stockInfo.fundingRounds
+    } else if (stockInfo.financialSummary?.fundingRounds) {
+      financials.fundingRounds = stockInfo.financialSummary.fundingRounds
+    }
+
+    panelLogger.debug('Extracted private financials for Company Context:', financials)
+    
+    return financials
+  }
+
+  /**
    * Check if a company is a subsidiary showing parent company data
    * @param {Object} company - Company data object
    * @returns {boolean} True if subsidiary
@@ -2249,7 +2300,9 @@ class LinkedIntelInsightsPanel {
       }
 
       // AI Summary Generate button
-      const generateBtn = e.target.closest('.linkedintel-ai-summary-generate-btn')
+      const generateBtn = e.target.closest(
+        '.linkedintel-ai-summary-generate-btn'
+      )
       if (generateBtn) {
         this.handleAISummaryGenerate(generateBtn)
       }
@@ -3674,6 +3727,9 @@ class LinkedIntelInsightsPanel {
       pageType: this.pageType,
     })
 
+    // Populate unified context service with all available data
+    this.populateUnifiedContext(data)
+
     // Track successful analysis display with GA4
     this.trackEvent('analysis_displayed', {
       page_type: this.pageType,
@@ -3926,6 +3982,12 @@ class LinkedIntelInsightsPanel {
         icon: '<svg class="linkedintel-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>',
         content: this.generateContactStrategy(profile),
       },
+      {
+        id: 'chrome-ai',
+        label: 'Chrome AI',
+        icon: '<svg class="linkedintel-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z"/></svg>',
+        content: this.generateChromeAITab({ profile, company }),
+      },
     ]
   }
 
@@ -4140,6 +4202,12 @@ class LinkedIntelInsightsPanel {
         count: data.priorityContacts?.length || null,
         content: this.generateDecisionMakers(data),
       },
+      {
+        id: 'chrome-ai',
+        label: 'Chrome AI',
+        icon: '<svg class="linkedintel-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z"/></svg>',
+        content: this.generateChromeAITab(data),
+      },
     ]
   }
 
@@ -4150,7 +4218,7 @@ class LinkedIntelInsightsPanel {
     const companyName = profile.company || company.companyName || ''
     const isCXO = profile.isCXO?.value || false
     const cxoLevel = profile.isCXO?.level || 'Executive'
-    const decisionScore = profile.decisionMakerScore || 0
+    const authorityIndicators = profile.authorityIndicators || []
 
     let html = `
       <div class="linkedintel-hero-card">
@@ -5925,45 +5993,8 @@ class LinkedIntelInsightsPanel {
       }
     }
 
-    // Engagement Level
-    if (trends.engagementLevel) {
-      const engagement = trends.engagementLevel
-      const hasContent =
-        engagement.postFrequency ||
-        (engagement.topicsDiscussed && engagement.topicsDiscussed.length > 0)
-
-      if (hasContent) {
-        html += `
-          <div class="linkedintel-section">
-            <div class="linkedintel-section-header">
-              <svg class="linkedintel-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-              </svg>
-              <h3 class="linkedintel-section-title">Engagement Insights</h3>
-            </div>
-            <div class="linkedintel-info-box" style="background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%); border: 1px solid #81c784; border-left: 4px solid #4caf50;">
-              ${
-                engagement.postFrequency
-                  ? `<p class="linkedintel-info-text"><strong>Post Frequency:</strong> ${this.escapeHtml(
-                      engagement.postFrequency
-                    )}</p>`
-                  : ''
-              }
-              ${
-                engagement.topicsDiscussed &&
-                engagement.topicsDiscussed.length > 0
-                  ? `
-                <p class="linkedintel-info-text" style="margin-top: 8px;"><strong>Topics Discussed:</strong> ${engagement.topicsDiscussed.join(
-                  ', '
-                )}</p>
-              `
-                  : ''
-              }
-            </div>
-          </div>
-        `
-      }
-    }
+    // Engagement Level - REMOVED (subjective metric)
+    // Replaced with factual posting frequency data shown in Recent Activity section
 
     // Process citation markers and append footnotes if we have content
     if (html) {
@@ -6647,6 +6678,311 @@ class LinkedIntelInsightsPanel {
     `
   }
 
+  // Chrome AI Tab - Settings and Status
+  generateChromeAITab(data) {
+    // Check if Chrome AI service is available
+    const hasChromeAI = typeof window.chromeAI !== 'undefined'
+    let availability = null
+    let details = null
+
+    if (hasChromeAI) {
+      availability = window.chromeAI.availability || {}
+      details = window.chromeAI.getDetailedAvailabilitySync
+        ? window.chromeAI.getDetailedAvailabilitySync()
+        : window.chromeAI.detailedAvailability || {}
+    }
+
+    // Count available features (only count real features, not deprecated ones)
+    const enabledCount = details
+      ? Object.entries(details).filter(([key, api]) => 
+          api.available
+        ).length
+      : 0
+    const totalCount = 2 // Only count summarizer and prompt (the active features)
+    const allEnabled = enabledCount === totalCount
+    const someEnabled = enabledCount > 0 && enabledCount < totalCount
+    const noneEnabled = enabledCount === 0
+
+    return `
+      <div class="linkedintel-chrome-ai-container">
+        <!-- Header Section -->
+        <div class="linkedintel-section" style="margin-bottom: 24px;">
+          <div style="background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); border-radius: 16px; padding: 24px; border: 1px solid #c084fc; box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z"/>
+              </svg>
+              <div>
+                <h2 style="color: white; font-size: 20px; font-weight: 700; margin: 0;">Chrome Built-in AI</h2>
+                <p style="color: rgba(255, 255, 255, 0.9); font-size: 14px; margin: 4px 0 0 0;">On-device AI features powered by Gemini Nano</p>
+              </div>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 16px; backdrop-filter: blur(10px);">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: white; font-size: 14px; font-weight: 600;">Status:</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="color: white; font-size: 16px; font-weight: 700;">${enabledCount} / ${totalCount}</span>
+                  <span style="background: ${
+                    allEnabled ? '#10b981' : someEnabled ? '#f59e0b' : '#ef4444'
+                  }; color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase;">
+                    ${
+                      allEnabled
+                        ? '✓ All Ready'
+                        : someEnabled
+                        ? '⚠ Partial'
+                        : '✕ Not Ready'
+                    }
+                  </span>
+                </div>
+              </div>
+              
+              ${
+                !hasChromeAI
+                  ? `
+                <div style="color: rgba(255, 255, 255, 0.9); font-size: 13px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.2);">
+                  <strong>⚠️ Chrome AI Service Not Loaded</strong><br/>
+                  Please refresh the page or check the extension installation.
+                </div>
+              `
+                  : ''
+              }
+            </div>
+          </div>
+        </div>
+
+        ${
+          hasChromeAI
+            ? `
+          <!-- Feature Status Section -->
+          <div class="linkedintel-section" style="margin-bottom: 24px;">
+            <div class="linkedintel-section-header">
+              <svg class="linkedintel-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <h3 class="linkedintel-section-title">Available Features</h3>
+            </div>
+            
+            <div class="linkedintel-list">
+              ${this.generateAIFeatureItem(
+                'Summarizer',
+                details?.summarizer,
+                'Instant on-device summaries of profiles and companies'
+              )}
+              ${this.generateAIFeatureItem(
+                'Prompt API',
+                details?.prompt,
+                'Intelligent chat responses and personalized outreach'
+              )}
+            </div>
+          </div>
+
+          ${
+            noneEnabled || someEnabled
+              ? `
+            <!-- Setup Instructions -->
+            <div class="linkedintel-section" style="margin-bottom: 24px;">
+              <div class="linkedintel-section-header">
+                <svg class="linkedintel-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v20M2 12h20"/>
+                  <circle cx="12" cy="12" r="5"/>
+                </svg>
+                <h3 class="linkedintel-section-title">Setup Instructions</h3>
+              </div>
+              
+              <div class="linkedintel-info-box warning" style="margin-bottom: 16px;">
+                <p class="linkedintel-info-title">⚙️ Enable Chrome AI Features</p>
+                <p class="linkedintel-info-text">Follow these steps to activate on-device AI capabilities:</p>
+              </div>
+
+              <div class="linkedintel-list">
+                <div class="linkedintel-list-item" style="flex-direction: column; align-items: flex-start; padding: 16px;">
+                  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                    <div style="background: #4c6ef5; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">1</div>
+                    <strong style="font-size: 14px; color: #212529;">Chrome Version</strong>
+                  </div>
+                  <p style="margin: 0 0 0 40px; font-size: 13px; color: #495057; line-height: 1.6;">
+                    You need <strong>Chrome 127+</strong> (Dev or Canary channel recommended).<br/>
+                    <a href="https://www.google.com/chrome/canary/" target="_blank" style="color: #4c6ef5; text-decoration: none;">Download Chrome Canary →</a>
+                  </p>
+                </div>
+
+                <div class="linkedintel-list-item" style="flex-direction: column; align-items: flex-start; padding: 16px;">
+                  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                    <div style="background: #4c6ef5; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">2</div>
+                    <strong style="font-size: 14px; color: #212529;">Enable Chrome Flags</strong>
+                  </div>
+                  <div style="margin: 0 0 0 40px; font-size: 13px; color: #495057; line-height: 1.6;">
+                    <p style="margin: 0 0 8px 0;">Open each URL in Chrome and set to <strong>Enabled</strong>:</p>
+                    <ul style="margin: 8px 0; padding-left: 20px;">
+                      <li style="margin: 6px 0;"><code style="background: #f1f3f5; padding: 2px 6px; border-radius: 4px; font-size: 12px;">chrome://flags/#optimization-guide-on-device-model</code></li>
+                      <li style="margin: 6px 0;"><code style="background: #f1f3f5; padding: 2px 6px; border-radius: 4px; font-size: 12px;">chrome://flags/#prompt-api-for-gemini-nano</code></li>
+                      <li style="margin: 6px 0;"><code style="background: #f1f3f5; padding: 2px 6px; border-radius: 4px; font-size: 12px;">chrome://flags/#summarization-api-for-gemini-nano</code></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="linkedintel-list-item" style="flex-direction: column; align-items: flex-start; padding: 16px;">
+                  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                    <div style="background: #4c6ef5; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">3</div>
+                    <strong style="font-size: 14px; color: #212529;">Restart Chrome</strong>
+                  </div>
+                  <p style="margin: 0 0 0 40px; font-size: 13px; color: #495057; line-height: 1.6;">
+                    After enabling all flags, <strong>completely close and restart Chrome</strong>.
+                  </p>
+                </div>
+
+                <div class="linkedintel-list-item" style="flex-direction: column; align-items: flex-start; padding: 16px;">
+                  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                    <div style="background: #4c6ef5; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">4</div>
+                    <strong style="font-size: 14px; color: #212529;">Download AI Model</strong>
+                  </div>
+                  <p style="margin: 0 0 8px 40px; font-size: 13px; color: #495057; line-height: 1.6;">
+                    Open DevTools (F12), paste this in the Console, and press Enter:
+                  </p>
+                  <pre style="margin: 0 0 0 40px; background: #1e1e1e; color: #d4d4d4; padding: 12px; border-radius: 8px; font-size: 12px; font-family: 'Courier New', monospace; overflow-x: auto;">await ai.languageModel.create();</pre>
+                  <p style="margin: 8px 0 0 40px; font-size: 12px; color: #868e96; line-height: 1.6;">
+                    This will download Gemini Nano (~1.5GB) in the background.
+                  </p>
+                </div>
+
+                <div class="linkedintel-list-item" style="flex-direction: column; align-items: flex-start; padding: 16px;">
+                  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                    <div style="background: #10b981; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">✓</div>
+                    <strong style="font-size: 14px; color: #212529;">Verify Setup</strong>
+                  </div>
+                  <p style="margin: 0 0 0 40px; font-size: 13px; color: #495057; line-height: 1.6;">
+                    Refresh this page and check if all features show <span style="color: #10b981; font-weight: 600;">✓ Ready</span> above.
+                  </p>
+                </div>
+              </div>
+            </div>
+          `
+              : ''
+          }
+
+          ${
+            allEnabled
+              ? `
+            <!-- Features Unlocked -->
+            <div class="linkedintel-section">
+              <div class="linkedintel-info-box success">
+                <p class="linkedintel-info-title">🎉 All Features Unlocked!</p>
+                <p class="linkedintel-info-text">Chrome AI is fully enabled. You can now use:</p>
+                <ul style="margin: 12px 0 0 0; padding-left: 20px;">
+                  <li style="margin: 6px 0;">Quick Summary badges on profiles and company pages</li>
+                  <li style="margin: 6px 0;">AI Compose for personalized outreach messages</li>
+                  <li style="margin: 6px 0;">Message Refinement with tone adjustments (Refine button)</li>
+                  <li style="margin: 6px 0;">Intelligent chat responses in the Ask AI tab</li>
+                  <li style="margin: 6px 0;">On-device summaries in the Overview tab</li>
+                </ul>
+              </div>
+            </div>
+          `
+              : ''
+          }
+
+          <!-- Debug Information -->
+          <div class="linkedintel-section" style="margin-top: 24px;">
+            <div class="linkedintel-section-header">
+              <svg class="linkedintel-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+              </svg>
+              <h3 class="linkedintel-section-title">Debug Information</h3>
+            </div>
+            
+            <div class="linkedintel-list">
+              <div class="linkedintel-list-item" style="flex-direction: column; align-items: flex-start;">
+                <p style="margin: 0; font-size: 12px; color: #868e96; font-family: 'Courier New', monospace; line-height: 1.8;">
+                  <strong style="color: #495057;">Service Loaded:</strong> ${
+                    hasChromeAI ? '✓ Yes' : '✕ No'
+                  }<br/>
+                  <strong style="color: #495057;">Initialized:</strong> ${
+                    hasChromeAI && window.chromeAI.isInitialized
+                      ? '✓ Yes'
+                      : '✕ No'
+                  }<br/>
+                  <strong style="color: #495057;">User Agent:</strong> ${(() => {
+                    const match = navigator.userAgent.match(/Chrome\/([0-9]+)/)
+                    return navigator.userAgent.includes('Chrome')
+                      ? 'Chrome ' + (match ? match[1] : 'Unknown')
+                      : 'Not Chrome'
+                  })()}
+                </p>
+              </div>
+            </div>
+            
+            <div style="margin-top: 16px;">
+              <a href="https://developer.chrome.com/docs/ai/built-in" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; color: #4c6ef5; text-decoration: none; font-size: 14px; font-weight: 600;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4"/>
+                  <path d="M12 8h.01"/>
+                </svg>
+                Chrome Built-in AI Documentation
+              </a>
+            </div>
+          </div>
+        `
+            : `
+          <!-- Service Not Available -->
+          <div class="linkedintel-section">
+            <div class="linkedintel-info-box danger">
+              <p class="linkedintel-info-title">⚠️ Chrome AI Service Unavailable</p>
+              <p class="linkedintel-info-text">
+                The Chrome AI service could not be loaded. Please check your extension installation and try refreshing the page.
+              </p>
+            </div>
+          </div>
+        `
+        }
+      </div>
+    `
+  }
+
+  // Generate AI feature status item
+  generateAIFeatureItem(name, status, description) {
+    const isAvailable = status?.available || false
+    const requiresDownload = status?.requiresDownload || false
+
+    let statusIcon, statusText, statusClass, statusColor
+
+    if (isAvailable) {
+      statusIcon = '✓'
+      statusText = 'Ready'
+      statusClass = 'success'
+      statusColor = '#10b981'
+    } else if (requiresDownload) {
+      statusIcon = '↓'
+      statusText = 'Download Required'
+      statusClass = 'warning'
+      statusColor = '#f59e0b'
+    } else {
+      statusIcon = '✕'
+      statusText = 'Not Available'
+      statusClass = 'danger'
+      statusColor = '#ef4444'
+    }
+
+    return `
+      <div class="linkedintel-list-item" style="display: flex; align-items: center; justify-content: space-between; padding: 16px;">
+        <div style="flex: 1;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+            <span style="color: ${statusColor}; font-size: 18px; font-weight: 700;">${statusIcon}</span>
+            <strong style="font-size: 14px; color: #212529;">${name}</strong>
+          </div>
+          <p style="margin: 0 0 0 28px; font-size: 13px; color: #868e96; line-height: 1.5;">${description}</p>
+        </div>
+        <div style="flex-shrink: 0; margin-left: 16px;">
+          <span style="background: ${statusColor}; color: white; padding: 4px 12px; border-radius: 16px; font-size: 11px; font-weight: 600; text-transform: uppercase; white-space: nowrap;">
+            ${statusText}
+          </span>
+        </div>
+      </div>
+    `
+  }
+
   // Strategy Tab (Executive Summary)
   generateStrategyContent(data) {
     let html = ''
@@ -6846,6 +7182,11 @@ class LinkedIntelInsightsPanel {
 
     // Add company context if available
     if (company && (company.recentNews?.length > 0 || company.stockInfo)) {
+      // Extract private company financials from dynamicFinancials for display
+      if (!this.isPublicCompany(company) && company.stockInfo) {
+        company.privateFinancials = this.extractPrivateFinancials(company.stockInfo)
+      }
+      
       html += `
         <!-- Company Context Section -->
         <div class="linkedintel-section" style="margin-top: 16px;">
@@ -7243,33 +7584,29 @@ class LinkedIntelInsightsPanel {
       `
     }
 
-    // Decision Maker Score Breakdown
-    if (profile.decisionMakerScore) {
-      const score = profile.decisionMakerScore
-      const scoreClass =
-        score >= 75 ? 'success' : score >= 50 ? 'warning' : 'danger'
-
+    // Authority Indicators - Factual only
+    if (authorityIndicators && authorityIndicators.length > 0) {
       html += `
         <div class="linkedintel-section">
           <div class="linkedintel-section-header">
             <svg class="linkedintel-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 20V10"></path>
-              <path d="M12 20V4"></path>
-              <path d="M6 20v-6"></path>
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            <h3 class="linkedintel-section-title">Decision Maker Score</h3>
+            <h3 class="linkedintel-section-title">Authority Indicators</h3>
           </div>
-          <div class="linkedintel-info-box ${scoreClass}">
-            <p class="linkedintel-info-title" style="font-size: 32px; font-weight: 800; margin-bottom: 8px;">${score}/100</p>
-            <p class="linkedintel-info-text">
-              ${
-                score >= 75
-                  ? '🎯 High influence - Primary decision maker'
-                  : score >= 50
-                  ? '⚡ Moderate influence - Key stakeholder'
-                  : '💡 Lower influence - May need senior approval'
-              }
-            </p>
+          <div class="linkedintel-info-box">
+            <ul class="linkedintel-list">
+              ${authorityIndicators
+                .map(
+                  (indicator) => `
+                <li class="linkedintel-list-item">
+                  <span class="linkedintel-badge-sm success">✓</span>
+                  ${this.escapeHtml(indicator)}
+                </li>
+              `
+                )
+                .join('')}
+            </ul>
           </div>
         </div>
       `
@@ -8409,7 +8746,11 @@ class LinkedIntelInsightsPanel {
     let html = ''
 
     // Add Chrome AI Quick Summary Section at the top
-    if (window.chromeAI && window.chromeAI.isAvailable && window.chromeAI.isAvailable('summarizer')) {
+    if (
+      window.chromeAI &&
+      window.chromeAI.isAvailable &&
+      window.chromeAI.isAvailable('summarizer')
+    ) {
       html += `
         <div class="linkedintel-section linkedintel-ai-summary-section" style="margin-bottom: 24px;">
           <div style="background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); border-radius: 16px; padding: 20px; border: 1px solid #c084fc; box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);">
@@ -10752,16 +11093,34 @@ class LinkedIntelInsightsPanel {
     try {
       // Build content to summarize
       const contentToSummarize = this.buildContentForSummary()
-      
+
       if (!contentToSummarize) {
         throw new Error('No content available to summarize')
       }
 
       // Get current summary type
-      const activeTypeBtn = section.querySelector('.linkedintel-ai-summary-type-btn.active')
-      const summaryType = activeTypeBtn?.getAttribute('data-type') || 'key-points'
+      const activeTypeBtn = section.querySelector(
+        '.linkedintel-ai-summary-type-btn.active'
+      )
+      const summaryType =
+        activeTypeBtn?.getAttribute('data-type') || 'key-points'
 
       panelLogger.info(`Generating ${summaryType} summary...`)
+
+      // Check Chrome AI availability
+      if (!window.chromeAI) {
+        throw new Error('Chrome AI service not available. Please ensure Chrome AI is properly configured.')
+      }
+
+      // Initialize Chrome AI if needed
+      if (!window.chromeAI.isInitialized) {
+        await window.chromeAI.initialize()
+      }
+
+      // Check if summarizer is available
+      if (!window.chromeAI.isAvailable('summarizer')) {
+        throw new Error('Summarizer API is not available. You may need to download the AI model first.')
+      }
 
       // Generate summary using Chrome AI
       const summary = await window.chromeAI.summarizeText(contentToSummarize, {
@@ -10782,12 +11141,12 @@ class LinkedIntelInsightsPanel {
       panelLogger.info('Summary generated successfully')
     } catch (error) {
       panelLogger.error('Error generating summary:', error)
-      
+
       // Show error
       if (resultEl) {
         resultEl.textContent = `Error: ${error.message}\n\nPlease try again or check if the Gemini Nano model needs to be downloaded.`
       }
-      
+
       if (loadingEl) loadingEl.style.display = 'none'
       if (contentEl) contentEl.style.display = 'block'
     }
@@ -10801,18 +11160,22 @@ class LinkedIntelInsightsPanel {
     if (!section) return
 
     // Update active state
-    section.querySelectorAll('.linkedintel-ai-summary-type-btn').forEach((btn) => {
-      btn.classList.remove('active')
-      btn.style.background = 'rgba(255, 255, 255, 0.1)'
-      btn.style.borderColor = 'rgba(255, 255, 255, 0.2)'
-    })
+    section
+      .querySelectorAll('.linkedintel-ai-summary-type-btn')
+      .forEach((btn) => {
+        btn.classList.remove('active')
+        btn.style.background = 'rgba(255, 255, 255, 0.1)'
+        btn.style.borderColor = 'rgba(255, 255, 255, 0.2)'
+      })
 
     button.classList.add('active')
     button.style.background = 'rgba(255, 255, 255, 0.2)'
     button.style.borderColor = 'rgba(255, 255, 255, 0.3)'
 
     // Regenerate summary with new type
-    const generateBtn = section.querySelector('.linkedintel-ai-summary-generate-btn')
+    const generateBtn = section.querySelector(
+      '.linkedintel-ai-summary-generate-btn'
+    )
     if (generateBtn && generateBtn.style.display === 'none') {
       // Summary already generated, regenerate with new type
       await this.handleAISummaryGenerate(generateBtn)
@@ -10821,6 +11184,7 @@ class LinkedIntelInsightsPanel {
 
   /**
    * Build content for summary from current data
+   * Focus on ACTIONABLE SALES INTELLIGENCE, not generic info
    */
   buildContentForSummary() {
     if (!this.currentData) return null
@@ -10828,77 +11192,362 @@ class LinkedIntelInsightsPanel {
     const parts = []
 
     if (this.pageType === 'company') {
-      const companyName = this.currentData.companyName || this.currentData.name || 'Company'
-      parts.push(`Company: ${companyName}`)
-
-      if (this.currentData.industryContext?.description) {
-        parts.push(`Description: ${this.currentData.industryContext.description.substring(0, 800)}`)
-      }
-
+      const companyName =
+        this.currentData.companyName || this.currentData.name || 'Company'
+      
+      // Build narrative introduction
+      let intro = `${companyName} is`
       if (this.currentData.overview?.industry) {
-        parts.push(`Industry: ${this.currentData.overview.industry}`)
+        intro += ` a ${this.currentData.overview.industry} company`
       }
-
-      if (this.currentData.overview?.employeeCount) {
-        parts.push(`Size: ${this.currentData.overview.employeeCount} employees`)
-      }
-
       if (this.currentData.stockInfo?.companyType) {
-        parts.push(`Type: ${this.currentData.stockInfo.companyType}`)
+        intro += ` (${this.currentData.stockInfo.companyType})`
+      }
+      if (this.currentData.overview?.employeeCount) {
+        intro += ` with ${this.currentData.overview.employeeCount} employees`
+      }
+      intro += '.'
+      parts.push(intro)
+
+      // Company description
+      if (this.currentData.industryContext?.description) {
+        parts.push(this.currentData.industryContext.description.substring(0, 400))
       }
 
-      if (this.currentData.industryContext?.foundedYear) {
-        parts.push(`Founded: ${this.currentData.industryContext.foundedYear}`)
+      // PRIORITY: Buying Signals (most actionable)
+      if (this.currentData.buyingSignals && this.currentData.buyingSignals.length > 0) {
+        const signals = this.currentData.buyingSignals.slice(0, 3)
+          .map(s => `• ${s.signal || s.type || s}: ${s.description || s.context || ''}`)
+          .join('\n')
+        parts.push(`🎯 BUYING SIGNALS:\n${signals}`)
       }
 
-      // Add key highlights
+      // Pain Points (second priority)
+      if (this.currentData.painPoints && this.currentData.painPoints.length > 0) {
+        const pains = this.currentData.painPoints.slice(0, 3)
+          .map(p => `• ${p.point || p.description || p}`)
+          .join('\n')
+        parts.push(`⚠️ PAIN POINTS:\n${pains}`)
+      }
+
+      // Recent news and activities
+      if (this.currentData.recentNews && this.currentData.recentNews.length > 0) {
+        const news = this.currentData.recentNews.slice(0, 2)
+          .map(n => `• ${n.title || n.headline || n}`)
+          .join('\n')
+        parts.push(`📰 RECENT NEWS:\n${news}`)
+      }
+
+      // Growth events
+      if (this.currentData.growthEvents && this.currentData.growthEvents.length > 0) {
+        const events = this.currentData.growthEvents.slice(0, 2)
+          .map(e => `• ${e.event || e.title || e}`)
+          .join('\n')
+        parts.push(`📈 GROWTH SIGNALS:\n${events}`)
+      }
+
+      // Funding info
       if (this.currentData.fundingInfo?.totalFunding) {
-        parts.push(`Funding: ${this.currentData.fundingInfo.totalFunding}`)
+        parts.push(`💰 FUNDING: Raised ${this.currentData.fundingInfo.totalFunding} total`)
       }
 
+      // Hiring signals
+      if (this.currentData.hiringSignals && this.currentData.hiringSignals.length > 0) {
+        parts.push(`👥 HIRING: ${this.currentData.hiringSignals.length} open positions (growth indicator)`)
+      }
+
+      // Tech stack (condensed)
       if (this.currentData.techStack && this.currentData.techStack.length > 0) {
-        const topTech = this.currentData.techStack.slice(0, 5).map(t => t.name).join(', ')
-        parts.push(`Tech Stack: ${topTech}`)
+        const topTech = this.currentData.techStack
+          .slice(0, 5)
+          .map((t) => t.name)
+          .join(', ')
+        parts.push(`💻 TECH STACK: ${topTech}`)
       }
     } else if (this.pageType === 'profile') {
       const profile = this.currentData.profile || {}
       const company = this.currentData.company || {}
+      // CRITICAL: Backend sends activity as profile.recentActivity
+      const posts = profile.recentActivity || this.currentData.posts || this.currentData.activity || {}
 
+      // Build narrative introduction
+      let intro = ''
       if (profile.name) {
-        parts.push(`Name: ${profile.name}`)
+        intro = `${profile.name} is`
+        if (profile.title) {
+          intro += ` the ${profile.title}`
+        }
+        if (profile.company || company.companyName) {
+          intro += ` at ${profile.company || company.companyName}`
+        }
+        if (company.industry) {
+          intro += `, a ${company.industry} company`
+        }
+        intro += '.'
+        parts.push(intro)
       }
 
-      if (profile.title) {
-        parts.push(`Title: ${profile.title}`)
-      }
-
-      if (profile.company || company.companyName) {
-        parts.push(`Company: ${profile.company || company.companyName}`)
-      }
-
-      if (profile.location) {
-        parts.push(`Location: ${profile.location}`)
-      }
-
-      if (profile.about) {
-        parts.push(`About: ${profile.about.substring(0, 500)}`)
-      }
-
-      if (profile.yearsOfExperience) {
-        parts.push(`Experience: ${profile.yearsOfExperience} years`)
-      }
-
+      // Decision maker level (CRITICAL for sales)
       if (profile.isCXO?.value) {
-        parts.push(`Decision Maker: ${profile.isCXO.level || 'Executive'} level`)
+        const level = profile.isCXO.level || 'Executive'
+        const score = profile.decisionMakerScore || 'High'
+        parts.push(`🎯 DECISION MAKER: ${level}-level (Score: ${score}/100) - High buying authority`)
+      } else if (profile.decisionMakerScore) {
+        parts.push(`🎯 DECISION MAKER SCORE: ${profile.decisionMakerScore}/100`)
       }
 
-      if (profile.education && profile.education.length > 0) {
-        const topEd = profile.education[0]
-        parts.push(`Education: ${topEd.school || topEd.degree || 'Available'}`)
+      // PRIORITY 1: Recent Posts & Activity (What they're talking about NOW)
+      // Posts can be in posts.posts (backend schema) or posts.recentPosts (legacy)
+      const actualPosts = posts.posts || posts.recentPosts || []
+      if (actualPosts.length > 0) {
+        const recentContent = actualPosts.slice(0, 3)
+          .map(p => {
+            const text = p.text || p.content || ''
+            const preview = text.substring(0, 120)
+            return `• "${preview}${text.length > 120 ? '...' : ''}"`
+          })
+          .join('\n')
+        parts.push(`📊 RECENT ACTIVITY (${actualPosts.length} posts):\n${recentContent}`)
+      }
+
+      // Best Outreach Hook
+      if (posts.bestHook) {
+        const hookText = posts.bestHook.text?.substring(0, 150) || ''
+        parts.push(`🎣 BEST OUTREACH HOOK: ${posts.bestHook.type} - "${hookText}"`)
+      }
+
+      // Conferences & Speaking Engagements
+      if (posts.conferences && posts.conferences.length > 0) {
+        const conferences = posts.conferences.slice(0, 2)
+          .map(c => `• ${c.name || c.text?.substring(0, 80)}`)
+          .join('\n')
+        parts.push(`🎤 CONFERENCES:\n${conferences}`)
+      }
+
+      // Achievements & Milestones
+      if (posts.achievements && posts.achievements.length > 0) {
+        const achievements = posts.achievements.slice(0, 2)
+          .map(a => `• ${a.text?.substring(0, 100) || a}`)
+          .join('\n')
+        parts.push(`🏆 ACHIEVEMENTS:\n${achievements}`)
+      }
+
+      // Job Changes (timing opportunity)
+      if (posts.jobChanges && posts.jobChanges.length > 0) {
+        const jobChange = posts.jobChanges[0]
+        parts.push(`💼 RECENT JOB CHANGE: ${jobChange.text?.substring(0, 100) || jobChange}`)
+      }
+
+      // Pain Points mentioned in posts
+      if (posts.painPoints && posts.painPoints.length > 0) {
+        const pains = posts.painPoints.slice(0, 2)
+          .map(p => `• ${p.point || p}`)
+          .join('\n')
+        parts.push(`⚠️ PAIN POINTS:\n${pains}`)
+      }
+
+      // About section - ONLY if no other content available
+      if (profile.about && parts.length < 5) {
+        parts.push(`BACKGROUND: ${profile.about.substring(0, 300)}${profile.about.length > 300 ? '...' : ''}`)
+      }
+
+      // Professional background
+      if (profile.yearsOfExperience) {
+        parts.push(`EXPERIENCE: ${profile.yearsOfExperience} years in the field`)
+      }
+
+      // Key Insights (backend intelligence)
+      if (this.currentData.intelligence?.keyInsights && this.currentData.intelligence.keyInsights.length > 0) {
+        const insights = this.currentData.intelligence.keyInsights.slice(0, 3)
+          .map(i => `• ${i}`)
+          .join('\n')
+        parts.push(`💡 KEY INSIGHTS:\n${insights}`)
+      }
+
+      // Company context (brief)
+      if (company.overview) {
+        const companyInfo = []
+        if (company.overview.industry) companyInfo.push(company.overview.industry)
+        if (company.overview.employeeCount) companyInfo.push(`${company.overview.employeeCount} employees`)
+        if (companyInfo.length > 0) {
+          parts.push(`🏢 COMPANY: ${companyInfo.join(', ')}`)
+        }
+      }
+
+      // Company tech stack (shows technical interests)
+      if (company.techStack && company.techStack.length > 0) {
+        const topTech = company.techStack
+          .slice(0, 5)
+          .map((t) => t.name)
+          .join(', ')
+        parts.push(`💻 COMPANY TECH: ${topTech}`)
       }
     }
 
-    return parts.join('\n\n').substring(0, 3000) // Limit to 3000 chars
+    const content = parts.join('\n\n')
+    panelLogger.debug('Built sales-focused summary content:', { 
+      length: content.length, 
+      preview: content.substring(0, 300),
+      sectionsIncluded: parts.length 
+    })
+    return content.substring(0, 4000) // Increased limit for richer context
+  }
+
+  /**
+   * Populate unified context service with all available data
+   * @param {Object} data - Analysis data from backend
+   */
+  populateUnifiedContext(data) {
+    if (!window.unifiedContext) {
+      panelLogger.error('❌ CRITICAL: Unified context service not loaded - Chrome AI features will not work')
+      panelLogger.error('Check manifest.json content script load order')
+      return
+    }
+
+    try {
+      // Extract profile data
+      const profileData = data.profile || {}
+      
+      // Extract company data (either direct or nested)
+      const companyData = data.company || data
+      
+      // Extract posts/activity data - CRITICAL: Backend sends it as profile.recentActivity
+      const postsData = profileData.recentActivity || data.posts || data.activity || {}
+      
+      // Debug: Log what activity data was received
+      panelLogger.debug('Populating unified context - Posts/Activity data:', {
+        hasProfileRecentActivity: !!profileData.recentActivity,
+        hasPosts: !!data.posts,
+        hasActivity: !!data.activity,
+        recentPostsCount: postsData.posts?.length || 0,
+        totalPosts: postsData.totalPosts || 0,
+        conferences: postsData.conferences?.length || 0,
+        achievements: postsData.achievements?.length || 0,
+        bestHook: !!postsData.bestHook,
+      })
+      
+      // Build context object
+      const contextUpdate = {
+        profile: {
+          name: profileData.name || null,
+          headline: profileData.headline || profileData.title || null,
+          currentPosition: profileData.currentPosition || null,
+          company: profileData.company || companyData.companyName || null,
+          location: profileData.location || null,
+          yearsOfExperience: profileData.yearsOfExperience || null,
+          isCXO: profileData.isCXO || null,
+          executiveLevel: profileData.executiveLevel || null,
+          decisionMakerScore: profileData.decisionMakerScore || null,
+          education: profileData.education || [],
+          skills: profileData.skills || [],
+          about: profileData.about || profileData.summary || null,
+        },
+        company: {
+          companyName: companyData.companyName || companyData.name || null,
+          industry: companyData.industry || null,
+          companySize: companyData.companySize || companyData.size || null,
+          location: companyData.location || null,
+          description: companyData.description || companyData.about || null,
+          website: companyData.website || null,
+          techStack: companyData.techStack || [],
+          fundingInfo: companyData.fundingInfo || null,
+          stockInfo: companyData.stockInfo || null,
+          employeeGrowth: companyData.employeeGrowth || null,
+          newsItems: companyData.newsItems || [],
+          hiringSignals: companyData.hiringSignals || null,
+          riskSignals: companyData.riskSignals || [],
+          competitors: companyData.competitors || [],
+        },
+        intelligence: {
+          painPoints: data.painPoints || postsData.painPoints || [],
+          buyingSignals: data.buyingSignals || [],
+          riskSignals: companyData.riskSignals || [],
+        },
+        activity: {
+          recentPosts: postsData.posts || postsData.recentPosts || [],
+          totalPosts: postsData.posts?.length || postsData.totalPosts || 0,
+          lastPostDate: postsData.lastPostDate || null,
+          engagementLevel: postsData.engagementLevel || 'unknown',
+        },
+        posts: {
+          recentPosts: postsData.posts || postsData.recentPosts || [],
+          totalPosts: postsData.posts?.length || postsData.totalPosts || 0,
+          conferences: postsData.conferences || [],
+          speaking: postsData.speaking || [],
+          achievements: postsData.achievements || [],
+          jobChanges: postsData.jobChanges || [],
+          bestHook: postsData.bestHook || null,
+          painPoints: postsData.painPoints || [],
+          hiringMentions: postsData.hiringMentions || [],
+        },
+        timeline: {
+          events: data.timeline?.events || [],
+          verification: data.timeline?.verification || [],
+        },
+      }
+
+      // Update the unified context service
+      window.unifiedContext.updateContext(contextUpdate)
+      
+      panelLogger.info('Unified context populated with panel data', {
+        hasProfile: !!contextUpdate.profile.name,
+        hasCompany: !!contextUpdate.company.companyName,
+        techStackCount: contextUpdate.company.techStack.length,
+        postsCount: contextUpdate.posts.recentPosts.length,
+      })
+    } catch (error) {
+      panelLogger.error('Error populating unified context:', error)
+    }
+  }
+
+  /**
+   * Build context for AI features (delegated to unified context service)
+   * @returns {Object} Full context from unified service
+   */
+  buildContext() {
+    if (!window.unifiedContext) {
+      panelLogger.warn('Unified context service not available, returning minimal context')
+      
+      // Fallback to minimal context if service unavailable
+      if (this.pageType === 'profile') {
+        const profile = this.currentData?.profile || {}
+        const company = this.currentData?.company || {}
+        return {
+          type: 'profile',
+          name: profile.name,
+          title: profile.title || profile.headline,
+          company: profile.company || company.companyName,
+          location: profile.location,
+        }
+      } else if (this.pageType === 'company') {
+        const data = this.currentData || {}
+        return {
+          type: 'company',
+          name: data.companyName,
+          industry: data.industry,
+          size: data.companySize,
+          location: data.location,
+        }
+      }
+      
+      return null
+    }
+
+    // Get full context from unified service
+    return window.unifiedContext.getFullContext()
+  }
+
+  /**
+   * Get prompt-optimized context for AI features
+   * @param {Object} options - Context options
+   * @returns {string} Formatted context string
+   */
+  getPromptContext(options = {}) {
+    if (!window.unifiedContext) {
+      return ''
+    }
+    
+    return window.unifiedContext.getPromptContext(options)
   }
 
   // Remove the panel
@@ -10920,6 +11569,11 @@ class LinkedIntelInsightsPanel {
 
     this.isVisible = false
     this.currentData = null
+    
+    // Clear unified context when panel is removed
+    if (window.unifiedContext) {
+      window.unifiedContext.clearContext()
+    }
   }
 }
 

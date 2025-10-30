@@ -21,15 +21,13 @@ class AIStatusIndicator {
       return;
     }
 
-    // Initialize Chrome AI service if not already done
-    if (window.chromeAI && !window.chromeAI.isInitialized) {
-      try {
-        this.availability = await window.chromeAI.initialize();
-      } catch (error) {
-        statusLogger.error('Failed to initialize Chrome AI:', error);
-      }
-    } else if (window.chromeAI) {
+    // Wait for Chrome AI to be fully initialized
+    await this.waitForInitialization();
+    
+    // Get accurate availability after initialization is complete
+    if (window.chromeAI && window.chromeAI.isInitialized) {
       this.availability = window.chromeAI.getDetailedAvailability();
+      statusLogger.info('AI Status after waiting for init:', this.availability);
     }
 
     this.statusElement = this.createStatusElement();
@@ -38,7 +36,39 @@ class AIStatusIndicator {
     // Update status every 30 seconds
     this.updateInterval = setInterval(() => this.updateStatus(), 30000);
 
-    statusLogger.info('AI Status Indicator rendered');
+    statusLogger.info('AI Status Indicator rendered with availability:', this.availability);
+  }
+
+  /**
+   * Wait for Chrome AI to be fully initialized
+   * Polls for up to 5 seconds
+   * @returns {Promise<void>}
+   */
+  async waitForInitialization() {
+    if (!window.chromeAI) {
+      statusLogger.warn('Chrome AI service not available');
+      return;
+    }
+
+    // If already initialized, return immediately
+    if (window.chromeAI.isInitialized) {
+      statusLogger.debug('Chrome AI already initialized');
+      return;
+    }
+
+    statusLogger.info('Waiting for Chrome AI initialization...');
+    
+    // Wait up to 5 seconds for initialization (50 iterations x 100ms)
+    for (let i = 0; i < 50; i++) {
+      if (window.chromeAI.isInitialized) {
+        statusLogger.info(`Chrome AI initialized after ${(i + 1) * 100}ms`);
+        return;
+      }
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+
+    // If we get here, initialization didn't complete in time
+    statusLogger.warn('Chrome AI initialization timeout after 5 seconds');
   }
 
   /**
@@ -75,9 +105,12 @@ class AIStatusIndicator {
       return this.getUnavailableHTML();
     }
 
-    const details = window.chromeAI.getDetailedAvailability();
+    // Use cached availability or get sync version
+    const details = this.availability || this.getAvailabilitySync();
     const enabledCount = Object.values(details).filter((api) => api.available).length;
     const totalCount = Object.keys(details).length;
+    
+    statusLogger.debug('Rendering status HTML with details:', { details, enabledCount, totalCount });
 
     return `
       <div class="linkedintel-ai-status ${this.isExpanded ? 'expanded' : 'collapsed'}">
@@ -107,10 +140,7 @@ class AIStatusIndicator {
 
           <div class="linkedintel-ai-features-list">
             ${this.getFeatureItemHTML('Summarizer', details.summarizer, 'Instant on-device summaries')}
-            ${this.getFeatureItemHTML('Writer', details.writer, 'Generate messages & content')}
-            ${this.getFeatureItemHTML('Rewriter', details.rewriter, 'Refine text with tone adjustments')}
-            ${this.getFeatureItemHTML('Proofreader', details.proofreader, 'Grammar & spell checking')}
-            ${this.getFeatureItemHTML('Prompt API', details.prompt, 'Intelligent chat responses')}
+            ${this.getFeatureItemHTML('Prompt API', details.prompt, 'Chat responses & personalized outreach')}
           </div>
 
           ${this.getModelInfoHTML(details)}
@@ -257,6 +287,43 @@ class AIStatusIndicator {
   }
 
   /**
+   * Get availability synchronously from cached data
+   * @returns {Object} Availability details
+   */
+  getAvailabilitySync() {
+    if (!window.chromeAI || !window.chromeAI.availability) {
+      return {
+        summarizer: { available: false, status: 'no', requiresDownload: false },
+        prompt: { available: false, status: 'no', requiresDownload: false },
+      };
+    }
+
+    const avail = window.chromeAI.availability;
+    
+    // Use the same isAvailable logic as the service
+    const isStatusAvailable = (status) => {
+      return ['readily', 'available', 'downloadable', 'downloading'].includes(status);
+    };
+    
+    const requiresDownload = (status) => {
+      return ['downloadable', 'downloading'].includes(status);
+    };
+    
+    return {
+      summarizer: {
+        available: isStatusAvailable(avail.summarizer),
+        status: avail.summarizer,
+        requiresDownload: requiresDownload(avail.summarizer),
+      },
+      prompt: {
+        available: isStatusAvailable(avail.prompt),
+        status: avail.prompt,
+        requiresDownload: requiresDownload(avail.prompt),
+      },
+    };
+  }
+
+  /**
    * Toggle expanded state
    */
   toggleExpanded() {
@@ -277,7 +344,14 @@ class AIStatusIndicator {
     if (!window.chromeAI) return;
 
     try {
+      // Recheck availability in case model was downloaded
+      if (window.chromeAI.recheckAvailability) {
+        await window.chromeAI.recheckAvailability();
+      }
+      
       this.availability = window.chromeAI.getDetailedAvailability();
+      statusLogger.debug('Updated AI status:', this.availability);
+      
       if (this.statusElement && this.statusElement.parentElement) {
         const newElement = this.createStatusElement();
         this.statusElement.replaceWith(newElement);
@@ -326,10 +400,7 @@ class AIStatusIndicator {
           <h4>🎯 Features in LinkedIntel</h4>
           <ul>
             <li><strong>Summarizer:</strong> Instant profile and company summaries</li>
-            <li><strong>Writer:</strong> Generate personalized outreach messages</li>
-            <li><strong>Rewriter:</strong> Refine your messages with different tones</li>
-            <li><strong>Proofreader:</strong> Check grammar before sending</li>
-            <li><strong>Prompt API:</strong> Fast responses for common questions</li>
+            <li><strong>Prompt API:</strong> Generate and refine personalized outreach messages</li>
           </ul>
 
           <h4>🔒 Privacy & Security</h4>

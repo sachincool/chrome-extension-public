@@ -114,16 +114,22 @@ class ChatInterface {
   }
 
   /**
-   * Generate AI Composer HTML (Writer API)
+   * Generate AI Composer HTML (Prompt API)
    */
   generateAIComposerHTML() {
-    if (!window.chromeAI || !window.chromeAI.isAvailable('writer')) {
+    if (!window.chromeAI || !window.chromeAI.isAvailable('prompt')) {
       return ''
     }
 
+    // Get context summary if available
+    const contextSummary = window.unifiedContext
+      ? window.unifiedContext.generateContextSummary()
+      : null
+    const hasContext = contextSummary && contextSummary.available.length > 0
+
     return `
       <div class="linkedintel-ai-composer" style="margin: 16px; padding: 16px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
-        <div style="display: flex; align-items: center; justify-content: between; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
               <path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
@@ -131,15 +137,18 @@ class ChatInterface {
             <span style="color: white; font-size: 13px; font-weight: 600;">AI Message Composer</span>
             <span style="background: rgba(255, 255, 255, 0.2); color: white; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;">On-Device</span>
           </div>
-          <button class="linkedintel-ai-composer-toggle" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); color: white; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 500; cursor: pointer;">
-            Expand
+          <button class="linkedintel-ai-composer-toggle" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); color: white; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 500; cursor: pointer; transition: all 0.2s;">
+            ${hasContext ? 'Collapse' : 'Expand'}
           </button>
         </div>
-        <div class="linkedintel-ai-composer-content" style="display: none;">
+        ${hasContext ? this.generateContextPreviewHTML(contextSummary) : ''}
+        <div class="linkedintel-ai-composer-content" style="display: ${
+          hasContext ? 'block' : 'none'
+        };">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
             <div>
-              <label style="color: rgba(255, 255, 255, 0.9); font-size: 11px; font-weight: 500; margin-bottom: 4px; display: block;">Message Type</label>
-              <select class="linkedintel-ai-message-type" style="width: 100%; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); color: white; border-radius: 6px; padding: 6px; font-size: 12px;">
+              <label style="color: white; font-size: 11px; font-weight: 600; margin-bottom: 4px; display: block; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">Message Type</label>
+              <select class="linkedintel-ai-message-type" style="width: 100%; background: white; border: none; color: #1a1a1a; border-radius: 6px; padding: 8px; font-size: 12px; font-weight: 500; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 <option value="cold-email">Cold Email</option>
                 <option value="linkedin">LinkedIn InMail</option>
                 <option value="follow-up">Follow-up</option>
@@ -147,8 +156,8 @@ class ChatInterface {
               </select>
             </div>
             <div>
-              <label style="color: rgba(255, 255, 255, 0.9); font-size: 11px; font-weight: 500; margin-bottom: 4px; display: block;">Tone</label>
-              <select class="linkedintel-ai-message-tone" style="width: 100%; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); color: white; border-radius: 6px; padding: 6px; font-size: 12px;">
+              <label style="color: white; font-size: 11px; font-weight: 600; margin-bottom: 4px; display: block; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">Tone</label>
+              <select class="linkedintel-ai-message-tone" style="width: 100%; background: white; border: none; color: #1a1a1a; border-radius: 6px; padding: 8px; font-size: 12px; font-weight: 500; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 <option value="professional">Professional</option>
                 <option value="casual">Casual</option>
                 <option value="friendly">Friendly</option>
@@ -157,17 +166,17 @@ class ChatInterface {
             </div>
           </div>
           <div style="margin-bottom: 12px;">
-            <label style="color: rgba(255, 255, 255, 0.9); font-size: 11px; font-weight: 500; margin-bottom: 4px; display: block;">Length</label>
+            <label style="color: white; font-size: 11px; font-weight: 600; margin-bottom: 4px; display: block; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">Length</label>
             <div style="display: flex; gap: 6px;">
-              <button class="linkedintel-ai-length-btn active" data-length="short" style="flex: 1; background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(255, 255, 255, 0.4); color: white; border-radius: 6px; padding: 6px; font-size: 11px; font-weight: 500; cursor: pointer;">Short</button>
-              <button class="linkedintel-ai-length-btn" data-length="medium" style="flex: 1; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; border-radius: 6px; padding: 6px; font-size: 11px; font-weight: 500; cursor: pointer;">Medium</button>
-              <button class="linkedintel-ai-length-btn" data-length="long" style="flex: 1; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; border-radius: 6px; padding: 6px; font-size: 11px; font-weight: 500; cursor: pointer;">Long</button>
+              <button class="linkedintel-ai-length-btn active" data-length="short" style="flex: 1; background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(255, 255, 255, 0.5); color: white; border-radius: 6px; padding: 8px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">Short</button>
+              <button class="linkedintel-ai-length-btn" data-length="medium" style="flex: 1; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: white; border-radius: 6px; padding: 8px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">Medium</button>
+              <button class="linkedintel-ai-length-btn" data-length="long" style="flex: 1; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: white; border-radius: 6px; padding: 8px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">Long</button>
             </div>
           </div>
-          <button class="linkedintel-ai-generate-btn" style="width: 100%; background: white; color: #059669; border: none; border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
-            Generate Message
+          <button class="linkedintel-ai-generate-btn" style="width: 100%; background: white; color: #059669; border: none; border-radius: 8px; padding: 12px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); transition: all 0.2s; margin-bottom: 0;">
+            ✨ Generate Message
           </button>
-          <div class="linkedintel-ai-result" style="display: none; margin-top: 12px; padding: 12px; background: rgba(255, 255, 255, 0.15); border-radius: 8px; color: white; font-size: 13px; line-height: 1.6;">
+          <div class="linkedintel-ai-result" style="display: none; margin-top: 12px; padding: 14px; background: rgba(255, 255, 255, 0.25); border-radius: 8px; color: white; font-size: 13px; line-height: 1.6; border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); white-space: pre-wrap; word-wrap: break-word; text-shadow: 0 1px 2px rgba(0,0,0,0.15);">
           </div>
         </div>
       </div>
@@ -175,10 +184,64 @@ class ChatInterface {
   }
 
   /**
-   * Generate Refine button HTML (Rewriter API)
+   * Generate context preview HTML showing available data
+   * @param {Object} summary - Context summary from unified service
+   * @returns {string} HTML for context preview
+   */
+  generateContextPreviewHTML(summary) {
+    if (!summary || summary.available.length === 0) {
+      return ''
+    }
+
+    const contextItems = summary.available
+      .slice(0, 5)
+      .map(
+        (item) => `
+      <div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(255, 255, 255, 0.15); border-radius: 6px; margin-bottom: 6px;">
+        <span style="font-size: 14px;">${item.icon}</span>
+        <div style="flex: 1;">
+          <div style="color: white; font-size: 11px; font-weight: 600;">${item.label}</div>
+          <div style="color: rgba(255, 255, 255, 0.8); font-size: 10px;">${item.detail}</div>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" style="background: white; border-radius: 50%; padding: 2px;">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+    `
+      )
+      .join('')
+
+    const missingItems =
+      summary.missing.length > 0
+        ? `
+      <div style="margin-top: 8px; padding: 8px; background: rgba(251, 191, 36, 0.15); border-radius: 6px; border: 1px solid rgba(251, 191, 36, 0.3);">
+        <div style="color: rgba(255, 255, 255, 0.9); font-size: 10px; font-weight: 600; margin-bottom: 4px;">⚠️ Limited Context</div>
+        <div style="color: rgba(255, 255, 255, 0.75); font-size: 10px;">Some data not available: ${summary.missing.join(
+          ', '
+        )}</div>
+      </div>
+    `
+        : ''
+
+    return `
+      <div class="linkedintel-context-preview" style="margin-bottom: 12px; padding: 12px; background: rgba(0, 0, 0, 0.15); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+          <div style="color: white; font-size: 12px; font-weight: 600;">✨ AI has context about:</div>
+          <button class="linkedintel-view-full-context" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.9); border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: 500; cursor: pointer;">
+            View Details
+          </button>
+        </div>
+        ${contextItems}
+        ${missingItems}
+      </div>
+    `
+  }
+
+  /**
+   * Generate Refine button HTML (Prompt API)
    */
   generateRefineButtonHTML() {
-    if (!window.chromeAI || !window.chromeAI.isAvailable('rewriter')) {
+    if (!window.chromeAI || !window.chromeAI.isAvailable('prompt')) {
       return ''
     }
 
@@ -559,10 +622,14 @@ class ChatInterface {
     })
 
     // AI Composer toggle
-    const composerToggle = this.container.querySelector('.linkedintel-ai-composer-toggle')
+    const composerToggle = this.container.querySelector(
+      '.linkedintel-ai-composer-toggle'
+    )
     if (composerToggle) {
       composerToggle.addEventListener('click', () => {
-        const content = this.container.querySelector('.linkedintel-ai-composer-content')
+        const content = this.container.querySelector(
+          '.linkedintel-ai-composer-content'
+        )
         if (content) {
           const isExpanded = content.style.display !== 'none'
           content.style.display = isExpanded ? 'none' : 'block'
@@ -572,24 +639,48 @@ class ChatInterface {
     }
 
     // AI Length buttons
-    const lengthBtns = this.container.querySelectorAll('.linkedintel-ai-length-btn')
+    const lengthBtns = this.container.querySelectorAll(
+      '.linkedintel-ai-length-btn'
+    )
     lengthBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
         lengthBtns.forEach((b) => {
           b.classList.remove('active')
-          b.style.background = 'rgba(255, 255, 255, 0.1)'
-          b.style.borderColor = 'rgba(255, 255, 255, 0.2)'
+          b.style.background = 'rgba(255, 255, 255, 0.15)'
+          b.style.borderColor = 'rgba(255, 255, 255, 0.3)'
         })
         btn.classList.add('active')
         btn.style.background = 'rgba(255, 255, 255, 0.3)'
-        btn.style.borderColor = 'rgba(255, 255, 255, 0.4)'
+        btn.style.borderColor = 'rgba(255, 255, 255, 0.5)'
       })
     })
 
     // AI Generate button
-    const generateBtn = this.container.querySelector('.linkedintel-ai-generate-btn')
+    const generateBtn = this.container.querySelector(
+      '.linkedintel-ai-generate-btn'
+    )
     if (generateBtn) {
       generateBtn.addEventListener('click', () => this.handleAIGenerate())
+    }
+
+    // View Full Context button
+    const viewContextBtn = this.container.querySelector(
+      '.linkedintel-view-full-context'
+    )
+    if (viewContextBtn) {
+      viewContextBtn.addEventListener('click', () => {
+        if (window.unifiedContext) {
+          const context = window.unifiedContext.getPromptContext()
+          chatLogger.info('Full Context:', context)
+
+          // Show in a modal or alert (for now, just log and alert)
+          alert(
+            'Full Context (check console for details):\n\n' +
+              context.substring(0, 500) +
+              '...'
+          )
+        }
+      })
     }
 
     // Refine button
@@ -824,9 +915,15 @@ class ChatInterface {
 
   /**
    * Build context object from current LinkedIn page data
-   * Optimized to send minimal context and reduce token usage
+   * Now uses unified context service for rich, aggregated data
    */
   buildContext() {
+    // Prefer unified context service
+    if (window.unifiedContext) {
+      return window.unifiedContext.getFullContext()
+    }
+
+    // Fallback to panel context if unified service not available
     if (!this.panel.currentData) return null
 
     if (this.panel.pageType === 'profile') {
@@ -1009,20 +1106,37 @@ class ChatInterface {
   // ============================================================================
 
   /**
-   * Handle AI message generation (Writer API)
+   * Handle AI message generation (Prompt API)
    */
   async handleAIGenerate() {
-    if (!window.chromeAI || !window.chromeAI.isAvailable('writer')) {
-      chatLogger.error('Chrome AI Writer not available')
+    // Check service availability
+    const services = this.checkServiceAvailability()
+    if (!services.chromeAI) {
+      chatLogger.error('Chrome AI service not loaded')
+      alert('Chrome AI is not available. Please ensure you have Chrome 128+ with AI features enabled.')
+      return
+    }
+    
+    if (!window.chromeAI || !window.chromeAI.isAvailable('prompt')) {
+      chatLogger.error('Chrome AI Prompt API not available')
+      alert('Chrome AI Prompt API is not available. You may need to enable it in chrome://flags')
       return
     }
 
-    const messageType = this.container.querySelector('.linkedintel-ai-message-type')?.value || 'cold-email'
-    const tone = this.container.querySelector('.linkedintel-ai-message-tone')?.value || 'professional'
-    const lengthBtn = this.container.querySelector('.linkedintel-ai-length-btn.active')
+    const messageType =
+      this.container.querySelector('.linkedintel-ai-message-type')?.value ||
+      'cold-email'
+    const tone =
+      this.container.querySelector('.linkedintel-ai-message-tone')?.value ||
+      'professional'
+    const lengthBtn = this.container.querySelector(
+      '.linkedintel-ai-length-btn.active'
+    )
     const length = lengthBtn?.getAttribute('data-length') || 'short'
     const resultEl = this.container.querySelector('.linkedintel-ai-result')
-    const generateBtn = this.container.querySelector('.linkedintel-ai-generate-btn')
+    const generateBtn = this.container.querySelector(
+      '.linkedintel-ai-generate-btn'
+    )
 
     if (!resultEl) return
 
@@ -1032,13 +1146,56 @@ class ChatInterface {
       generateBtn.disabled = true
       resultEl.style.display = 'none'
 
-      // Build context
-      const context = this.panel.buildContext ? this.panel.buildContext() : {}
+      // Build rich context from unified service
+      let context = null
+      
+      if (window.unifiedContext) {
+        // Get full context from unified service
+        context = window.unifiedContext.getFullContext()
+        chatLogger.debug('Using unified context:', {
+          hasProfile: !!context.profile,
+          hasCompany: !!context.company,
+          profileName: context.profile?.name,
+          companyName: context.company?.name,
+        })
+      } else if (this.panel.buildContext) {
+        // Fallback to panel's context builder
+        context = this.panel.buildContext()
+      }
 
-      chatLogger.info(`Generating ${messageType} with ${tone} tone...`)
+      // Log context details for debugging
+      chatLogger.info(`Generating ${messageType} with ${tone} tone...`, {
+        contextLength:
+          typeof context === 'string'
+            ? context.length
+            : JSON.stringify(context).length,
+        hasUnifiedContext: !!window.unifiedContext,
+        contextKeys: context ? Object.keys(context) : [],
+        prospectName: context?.profile?.name || 'Unknown',
+        prospectCompany: context?.company?.name || context?.profile?.company || 'Unknown',
+        prospectTitle: context?.profile?.title || context?.profile?.currentPosition || 'Unknown',
+        industry: context?.company?.industry || context?.profile?.industry || 'Unknown',
+      })
+
+      // Check Chrome AI availability
+      if (!window.chromeAI) {
+        throw new Error(
+          'Chrome AI service not available. Please ensure Chrome AI is properly configured.'
+        )
+      }
+
+      // Initialize Chrome AI if not already done
+      if (!window.chromeAI.isInitialized) {
+        await window.chromeAI.initialize()
+      }
 
       // Generate message using Chrome AI
-      const message = await window.chromeAI.generateOutreach(context, messageType, tone, length)
+      const message = await window.chromeAI.generateOutreach(
+        context,
+        messageType,
+        tone,
+        length
+      )
 
       // Display result
       resultEl.textContent = message
@@ -1091,11 +1248,11 @@ class ChatInterface {
   }
 
   /**
-   * Handle message refinement (Rewriter API)
+   * Handle message refinement (Prompt API)
    */
   async handleRefine() {
-    if (!window.chromeAI || !window.chromeAI.isAvailable('rewriter')) {
-      chatLogger.error('Chrome AI Rewriter not available')
+    if (!window.chromeAI || !window.chromeAI.isAvailable('prompt')) {
+      chatLogger.error('Chrome AI Prompt API not available')
       return
     }
 
@@ -1131,9 +1288,9 @@ class ChatInterface {
           <div style="margin-bottom: 16px;">
             <label style="display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600; color: #475569;">Select Tone</label>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="linkedintel-refine-tone-btn active" data-tone="more-casual" style="flex: 1; min-width: 120px; background: #8b5cf6; color: white; border: none; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: 500; cursor: pointer;">More Casual</button>
-              <button class="linkedintel-refine-tone-btn" data-tone="more-formal" style="flex: 1; min-width: 120px; background: #e2e8f0; color: #475569; border: none; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: 500; cursor: pointer;">More Formal</button>
-              <button class="linkedintel-refine-tone-btn" data-tone="more-concise" style="flex: 1; min-width: 120px; background: #e2e8f0; color: #475569; border: none; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: 500; cursor: pointer;">More Concise</button>
+              <button class="linkedintel-refine-tone-btn active" data-tone="more-casual" style="flex: 1; min-width: 120px; background: #a855f7; color: white; border: none; border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Casual</button>
+              <button class="linkedintel-refine-tone-btn" data-tone="more-formal" style="flex: 1; min-width: 120px; background: #e2e8f0; color: #475569; border: none; border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Formal</button>
+              <button class="linkedintel-refine-tone-btn" data-tone="shorter" style="flex: 1; min-width: 120px; background: #e2e8f0; color: #475569; border: none; border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Concise</button>
             </div>
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
@@ -1168,7 +1325,7 @@ class ChatInterface {
             b.style.color = '#475569'
             b.classList.remove('active')
           })
-          btn.style.background = '#8b5cf6'
+          btn.style.background = '#a855f7'
           btn.style.color = 'white'
           btn.classList.add('active')
         })
@@ -1178,23 +1335,78 @@ class ChatInterface {
       const refineBtn = modal.querySelector('.linkedintel-refine-action-btn')
       const refinedTextEl = modal.querySelector('.linkedintel-refined-text')
       const applyBtn = modal.querySelector('.linkedintel-refine-apply-btn')
-      
+
       refineBtn.addEventListener('click', async () => {
-        const activeTone = modal.querySelector('.linkedintel-refine-tone-btn.active')
+        const activeTone = modal.querySelector(
+          '.linkedintel-refine-tone-btn.active'
+        )
         const tone = activeTone?.getAttribute('data-tone') || 'more-casual'
 
         refineBtn.textContent = 'Refining...'
         refineBtn.disabled = true
-        refinedTextEl.innerHTML = '<div style="text-align: center; padding: 40px 0; color: #64748b;">Refining...</div>'
+        refinedTextEl.innerHTML =
+          '<div style="text-align: center; padding: 40px 0; color: #64748b;">Refining...</div>'
 
         try {
+          // Check Chrome AI availability
+          if (!window.chromeAI) {
+            throw new Error('Chrome AI service not available')
+          }
+
+          // Initialize Chrome AI if needed
+          if (!window.chromeAI.isInitialized) {
+            await window.chromeAI.initialize()
+          }
+
           const refined = await window.chromeAI.rewriteText(originalText, tone)
-          refinedTextEl.textContent = refined
-          applyBtn.style.display = 'block'
-          applyBtn.dataset.refined = refined
+          
+          // Parse refined text for multiple options
+          const options = this.parseRefinedOptions(refined)
+          
+          if (options.length > 1) {
+            // Multiple options detected - show as buttons
+            refinedTextEl.innerHTML = `
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                ${options.map((option, index) => `
+                  <button class="linkedintel-refined-option" data-option="${this.escapeAttr(option)}" style="background: white; border: 2px solid #e2e8f0; border-radius: 8px; padding: 12px; text-align: left; cursor: pointer; transition: all 0.2s; font-size: 13px; line-height: 1.6; color: #0f172a;">
+                    <div style="display: flex; align-items: start; gap: 8px;">
+                      <div style="flex-shrink: 0; width: 24px; height: 24px; background: #8b5cf6; color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px;">${index + 1}</div>
+                      <div style="flex: 1; white-space: pre-wrap;">${this.escapeHtml(option)}</div>
+                    </div>
+                  </button>
+                `).join('')}
+              </div>
+            `
+            
+            // Bind click handlers to option buttons
+            setTimeout(() => {
+              const optionBtns = refinedTextEl.querySelectorAll('.linkedintel-refined-option')
+              optionBtns.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                  // Clear previous selections
+                  optionBtns.forEach((b) => {
+                    b.style.borderColor = '#e2e8f0'
+                    b.style.background = 'white'
+                  })
+                  // Highlight selected
+                  btn.style.borderColor = '#8b5cf6'
+                  btn.style.background = '#faf5ff'
+                  
+                  // Set selected option
+                  applyBtn.dataset.refined = btn.dataset.option
+                  applyBtn.style.display = 'block'
+                })
+              })
+            }, 50)
+          } else {
+            // Single option - show as text
+            refinedTextEl.textContent = refined
+            applyBtn.dataset.refined = refined
+            applyBtn.style.display = 'block'
+          }
         } catch (error) {
           chatLogger.error('Error refining text:', error)
-          refinedTextEl.innerHTML = `<div style="color: #ef4444;">Error: ${error.message}</div>`
+          refinedTextEl.innerHTML = `<div style="color: #ef4444;">Error: ${error.message}<br><small>Please ensure Chrome AI is properly configured.</small></div>`
         } finally {
           refineBtn.textContent = 'Refine Again'
           refineBtn.disabled = false
@@ -1225,6 +1437,40 @@ class ChatInterface {
     }, 100)
 
     return modal
+  }
+
+  /**
+   * Parse refined text for multiple options
+   * Returns array of options if detected, otherwise single option
+   */
+  parseRefinedOptions(text) {
+    if (!text) return []
+    
+    // Check for numbered options (e.g., "**Option 1...**" or "Option 1:" or "1." or "1)")
+    const optionPatterns = [
+      /\*\*Option\s+(\d+)[:\)]*\*\*\s*[:\-]?\s*"?([^*]+)(?:\*\*)?/gi,
+      /Option\s+(\d+)[:\)]\s*(.+?)(?=Option\s+\d+[:\)]|$)/gis,
+      /^(\d+)\.\s+(.+?)(?=^\d+\.|$)/gms,
+      /^(\d+)\)\s+(.+?)(?=^\d+\)|$)/gms,
+    ]
+    
+    for (const pattern of optionPatterns) {
+      const matches = [...text.matchAll(pattern)]
+      if (matches.length > 1) {
+        // Multiple options found
+        return matches.map(match => {
+          let optionText = match[2] || match[1]
+          // Clean up the option text
+          optionText = optionText.trim()
+          // Remove trailing asterisks or quotes
+          optionText = optionText.replace(/[\*"]+$/g, '').trim()
+          return optionText
+        }).filter(opt => opt.length > 0)
+      }
+    }
+    
+    // No multiple options detected - return single option
+    return [text.trim()]
   }
 }
 
