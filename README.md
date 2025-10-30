@@ -170,7 +170,7 @@ See [`VIDEO_SCRIPT.md`](VIDEO_SCRIPT.md) for the complete recording guide.
 
 1. **Clone repository**
    ```bash
-   git clone https://github.com/linkedintel/chrome-extension-public.git
+   git clone https://github.com/yourusername/chrome-extension-public-clean.git
    cd chrome-extension-public-clean
    ```
 
@@ -327,40 +327,12 @@ chrome-extension-public-clean/
 
 ---
 
-## 🏆 Google Chrome Built-in AI Challenge 2025
-
-### Submission Snapshot
-- **Contest Period**: September 9 – October 31, 2025
-- **Category**: Chrome Extension – Best Hybrid AI Application
-- **Prize**: $9,000 + promotion + virtual coffee with Chrome team
-- **Created**: October 2025 (new project for this challenge)
-
-### Why LinkedIntel Qualifies
-- ✅ **New build** created for the challenge timeline
-- ✅ **Chrome Prompt + Summarizer APIs** implemented in production flows
-- ✅ **Hybrid architecture** demonstrating client + server AI
-- ✅ **High-impact problem** (15 min research → 30 sec)
-- ✅ **Measurable ROI** with 30× productivity lift
-- ✅ **Open source** MIT license, public GitHub
-- ✅ **Production polish** with error handling and documentation
-- ✅ **English-first** UI, docs, and code comments
-
-### Judging Criteria Alignment
-- **Functionality** ⭐⭐⭐⭐⭐ – Comprehensive Chrome AI coverage, scalable design
-- **Purpose** ⭐⭐⭐⭐⭐ – Solves real pain, quantifiable productivity gains
-- **Content** ⭐⭐⭐⭐ – Clean UI, creative status dashboards and onboarding
-- **User Experience** ⭐⭐⭐⭐⭐ – One-click actions, clear feedback, offline support
-- **Technical Execution** ⭐⭐⭐⭐⭐ – Robust architecture, clean code, best practices
-
----
-
 ## 🎥 Demo & Resources
 
-- **📹 Demo Video**: _Coming soon_
-- **📦 GitHub Repository**: <https://github.com/linkedintel/chrome-extension-public>
+- **📹 Demo Video**: [_YouTube Link - Add Before Submission_](#)
+- **📦 GitHub Repository**: <https://github.com/yourusername/chrome-extension-public-clean>
 - **🏆 Devpost Submission**: <https://googlechromeai2025.devpost.com/>
 - **📚 Chrome AI Docs**: <https://developer.chrome.com/docs/ai/built-in>
-- **💬 Devpost Profile**: <https://devpost.com/linkedintel>
 
 ---
 

@@ -187,6 +187,36 @@ class SupabaseService {
       return 0
     }
   }
+
+  /**
+   * Verify JWT token (stub for optional auth)
+   * Returns user object if valid, null otherwise
+   */
+  async verifyToken(token) {
+    if (!this.isConfigured()) {
+      logger.debug('Supabase not configured, token verification skipped')
+      return null
+    }
+
+    try {
+      // Verify token with Supabase Auth
+      const { data: { user }, error } = await this.client.auth.getUser(token)
+
+      if (error || !user) {
+        logger.debug('Token verification failed:', error?.message)
+        return null
+      }
+
+      return {
+        id: user.id,
+        email: user.email,
+        // Add other user fields as needed
+      }
+    } catch (error) {
+      logger.warn('Token verification error:', error.message)
+      return null
+    }
+  }
 }
 
 // Export singleton instance
