@@ -170,7 +170,7 @@ See [`VIDEO_SCRIPT.md`](VIDEO_SCRIPT.md) for the complete recording guide.
 
 1. **Clone repository**
    ```bash
-   git clone https://github.com/yourusername/chrome-extension-public-clean.git
+   git clone https://github.com/linkedintel/chrome-extension-public.git
    cd chrome-extension-public-clean
    ```
 
@@ -329,10 +329,11 @@ chrome-extension-public-clean/
 
 ## 🎥 Demo & Resources
 
-- **📹 Demo Video**: [_YouTube Link - Add Before Submission_](#)
-- **📦 GitHub Repository**: <https://github.com/yourusername/chrome-extension-public-clean>
+- **📹 Demo Video**: _Coming soon_
+- **📦 GitHub Repository**: <https://github.com/linkedintel/chrome-extension-public>
 - **🏆 Devpost Submission**: <https://googlechromeai2025.devpost.com/>
 - **📚 Chrome AI Docs**: <https://developer.chrome.com/docs/ai/built-in>
+- **💬 Devpost Profile**: <https://devpost.com/linkedintel>
 
 ---
 

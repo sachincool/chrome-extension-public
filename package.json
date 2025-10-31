@@ -50,9 +50,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/chrome-extension-public-clean.git"
+    "url": "https://github.com/linkedintel/chrome-extension-public-clean.git"
   },
-  "_comment": "Update repository.url with your actual GitHub repository URL before submission.",
+  "_comment": "Update repository.url with your actual public repository if you fork this project.",
   "dependencies": {
     "caniuse-lite": "^1.0.30001750"
   }
